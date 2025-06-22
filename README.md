@@ -3,6 +3,7 @@ TTRPGStats is a plugin for obsidian that allows you create your character sheet 
 
 # How to use
 You can create the components by creating a code block with the name of the component example:
+
  \```ttrpgstats-hp
 
  \```
