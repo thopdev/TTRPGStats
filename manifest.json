@@ -1,0 +1,10 @@
+{
+	"id": "TtrpgStats",
+	"name": "TTRPG Stats",
+	"version": "1.0.0",
+	"minAppVersion": "0.15.0",
+	"description": "This plugin provides a set of tools for tracking and managing statistics in tabletop role-playing games.",
+	"author": "ThopDev",
+	"authorUrl": "https://github.com/thopdev",
+	"isDesktopOnly": false
+}
