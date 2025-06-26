@@ -32,7 +32,7 @@ export class TrackerConfig {
         name: "Tracker 1",
         max: 5,
         color: "red",
-        events: [new TrackerConfigEvent("event1", "zero"), new TrackerConfigEvent("event2", "devideUp")]
+        events: [new TrackerConfigEvent("event1", "zero"), new TrackerConfigEvent("event2", "devideMaxUp")]
     });
 }
 
