@@ -36,16 +36,17 @@ Examples:
 
 ![tracker](docs/resources/images/tracker.png)
 
-**TrackerConfig**:
-| Name   | Type         | Required | Default | Comment                                        |
-|--------|--------------|----------|---------|------------------------------------------------|
-| id     | string       | Yes      |         | Value used in properties to save current value |
-| name   | string       | No       |         | Value displayed on the top                     |
-| max    | number       | Yes      |         | Max amount to track                            |
-| color  | string       | No       | Blue    | Value displayed on the top                     |
-| events | TrackerEvent | No       |         | Used to change values with button              |
+## Config
+### TrackerConfig
+| Name   | Type           | Required | Default | Comment                                        |
+|--------|----------------|----------|---------|------------------------------------------------|
+| id     | string         | Yes      |         | Value used in properties to save current value |
+| name   | string         | No       |         | Value displayed on the top                     |
+| max    | number         | Yes      |         | Max amount to track                            |
+| color  | string         | No       | Blue    | Value displayed on the top                     |
+| events | TrackerEvent[] | No       |         | Used to change values with button              |
 
-**TrackerEvent**
+### TrackerEvent
 | Name | Type                                                              | Required | Default | Comment                        |
 |------|-------------------------------------------------------------------|----------|---------|--------------------------------|
 | name | string                                                            | yes      |         | Name used for the event        |
@@ -56,3 +57,36 @@ color: string // Optional: Color used inside the checkbox
 events: // Optional: Used to change value with button
   - name: string // Required: Name used for the event
     calc: zero, max, decrease, increase, devideMaxUp, devideMaxDown, double // Optional: Default zero 
+
+## Tracker Button
+Component use:
+ttrpgstats-button
+```yaml
+buttons:
+ - name: Rest
+   id: short
+   color: green
+ - name: Long
+   id: long
+   color: red
+```
+
+Examples: 
+![tracker-buttons](docs/resources/images/tracker-buttons.png)
+
+## Config
+### TrackerButtonListConfig
+| Name    | Type                  | Required | Default | Comment                           |
+|---------|-----------------------|----------|---------|-----------------------------------|
+| buttons | TrackerButtonConfig[] | Yes      |         | Array containing the buttons      |
+| name    | string                | No       |         | Value displayed on the top        |
+| max     | number                | Yes      |         | Max amount to track               |
+| color   | string                | No       | Blue    | Color used for checkbox           |
+| events  | TrackerEvent          | No       |         | Used to change values with button |
+
+### TrackerButtonConfig
+| Name  | Type   | Required | Default | Comment                                         |
+|-------|--------|----------|---------|-------------------------------------------------|
+| name  | string | Yes      |         | Name inside the button                          |
+| id    | number | Yes      |         | Id of event that is trigged, as used in tracker |
+| color | string | No       | White   | Color of the button                             |
