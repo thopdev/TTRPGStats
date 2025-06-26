@@ -1,61 +1,43 @@
 <script lang="ts">
-	let {
-		properties: properties,
-		updateProperties: updateProperties,
-		settings: settings,
-	}: DefaultComponentProperties = $props();
+	import type { DefaultComponentProperties } from "src/General/Models/DefaultComponentProperties";
+	import { onDestroy } from "svelte";
 
-	let maxHealth = $state(
-		parseInt(properties[settings.maxHealthPropertyName]),
-	);
-	let currentHealth = $state(
-		parseInt(properties[settings.currentHealthPropertyName]),
-	);
-	let deathsaveSuccess = $state(
-		parseInt(properties[settings.deathSaveSuccessPropertyName] ?? "0"),
-	);
-	let deathsavefail = $state(
-		parseInt(properties[settings.deathSaveFailurePropertyName] ?? "0"),
-	);
+	const id = crypto.randomUUID().toString();
 
-	function checkAndFixHealth() {
-		if (isNaN(maxHealth) || isNaN(currentHealth)) {
-			if (isNaN(maxHealth)) {
-				maxHealth = 0;
-			}
-			if (isNaN(currentHealth)) {
-				currentHealth = maxHealth;
-			}
+	let { settings, content, pluginFileManager }: DefaultComponentProperties =
+		$props();
 
-			debugger;
-			updateProperties([
-				{
-					key: settings.maxHealthPropertyName,
-					value: maxHealth,
-				},
-				{
-					key: settings.currentHealthPropertyName,
-					value: currentHealth,
-				},
-			]);
+	let maxHealth = $state(0);
+	let currentHealth = $state(0);
+	let deathsaveSuccess = $state(0);
+	let deathsavefail = $state(0);
+	let healAmount = $state(1);
+
+	loadProperties();
+
+	pluginFileManager.propertyChangedEvent.on(id, loadProperties);
+	validateHealth();
+
+	function validateHealth() {
+		if (isNaN(maxHealth)) {
+			maxHealth = 1;
+			pluginFileManager.properties[settings.maxHealthPropertyName] = 1;
+			pluginFileManager.saveProperties(id);
 		}
 	}
-
-	checkAndFixHealth();
-
-	let healAmount = $state(1);
 
 	function heal() {
 		currentHealth = Math.min(currentHealth + healAmount, maxHealth);
 		healAmount = 1;
-		updateProperties([
-			{
-				key: settings.currentHealthPropertyName,
-				value: currentHealth.toString(),
-			},
-			{ key: settings.deathSaveSuccessPropertyName, value: null },
-			{ key: settings.deathSaveFailurePropertyName, value: null },
-		]);
+
+		pluginFileManager.properties[settings.currentHealthPropertyName] =
+			currentHealth;
+		pluginFileManager.properties[settings.deathSaveSuccessPropertyName] =
+			null;
+		pluginFileManager.properties[settings.deathSaveFailurePropertyName] =
+			null;
+
+		pluginFileManager.saveProperties(id);
 
 		healAmount = 1;
 	}
@@ -68,28 +50,18 @@
 		currentHealth = currentHealth - healAmount;
 		healAmount = 1;
 
+		pluginFileManager.properties[settings.currentHealthPropertyName] =
+			currentHealth;
+
 		if (currentHealth <= 0) {
-			currentHealth = 0;
-			updateProperties([
-				{
-					key: settings.currentHealthPropertyName,
-					value: currentHealth.toString(),
-				},
-				{ key: settings.deathSaveSuccessPropertyName, value: 0 },
-				{ key: settings.deathSaveFailurePropertyName, value: 0 },
-			]);
-			deathsaveSuccess = 0;
-			deathsavefail = 0;
-
-			return;
+			pluginFileManager.properties[
+				settings.deathSaveSuccessPropertyName
+			] = 0;
+			pluginFileManager.properties[
+				settings.deathSaveFailurePropertyName
+			] = 0;
 		}
-
-		updateProperties([
-			{
-				key: settings.currentHealthPropertyName,
-				value: currentHealth.toString(),
-			},
-		]);
+		pluginFileManager.saveProperties(id);
 	}
 
 	function handleDeathSaveSuccessClick(event: any) {
@@ -97,12 +69,7 @@
 
 		deathsaveSuccess += checked ? 1 : -1;
 
-		updateProperties([
-			{
-				key: settings.deathSaveSuccessPropertyName,
-				value: deathsaveSuccess.toString(),
-			},
-		]);
+		pluginFileManager.saveProperties(id);
 	}
 
 	function handleDeathSaveFailClick(event: any) {
@@ -110,14 +77,37 @@
 		const checked = event?.target?.checked;
 
 		deathsavefail += checked ? 1 : -1;
-
-		updateProperties([
-			{
-				key: settings.deathSaveFailurePropertyName,
-				value: deathsavefail.toString(),
-			},
-		]);
+		pluginFileManager.saveProperties(id);
 	}
+
+	function loadProperties() {
+		maxHealth = parseInt(
+			pluginFileManager.properties[settings.maxHealthPropertyName],
+		);
+
+		currentHealth = parseInt(
+			pluginFileManager.properties[settings.currentHealthPropertyName],
+		);
+
+		if (isNaN(currentHealth)) {
+			currentHealth = maxHealth;
+		}
+
+		deathsaveSuccess = parseInt(
+			pluginFileManager.properties[
+				settings.deathSaveSuccessPropertyName
+			] ?? "0",
+		);
+		deathsavefail = parseInt(
+			pluginFileManager.properties[
+				settings.deathSaveFailurePropertyName
+			] ?? "0",
+		);
+	}
+
+	onDestroy(() => {
+		pluginFileManager.propertyChangedEvent.off(id);
+	});
 </script>
 
 <div class="container">
@@ -136,7 +126,7 @@
 						{#each { length: 3 } as _, i}
 							<input
 								type="checkbox"
-								class="big-checkbox green-checkbox"
+								class="big-checkbox green-checkbox pointer"
 								checked={deathsaveSuccess > i}
 								data-number={i}
 								onchange={handleDeathSaveSuccessClick}
@@ -152,7 +142,7 @@
 						{#each { length: 3 } as _, i}
 							<input
 								type="checkbox"
-								class="big-checkbox red-checkbox"
+								class="big-checkbox red-checkbox pointer"
 								checked={deathsavefail > i}
 								onclick={handleDeathSaveFailClick}
 							/>
@@ -166,19 +156,17 @@
 	<div class="container">
 		<button
 			onclick={heal}
-			class="capitalize bold font-bigger color-green min-width-250"
+			class="capitalize bold font-bigger color-green min-width-250 pointer"
 			>Heal</button
 		>
-		{#key healAmount}
-			<input
-				type="number"
-				class="min-width-250 text-center font-bigger"
-				bind:value={healAmount}
-			/>
-		{/key}
+		<input
+			type="number"
+			class="min-width-250 text-center font-bigger"
+			bind:value={healAmount}
+		/>
 		<button
 			onclick={damage}
-			class="capitalize bold font-bigger color-red font-white min-width-250"
+			class="capitalize bold font-bigger color-red font-white min-width-250 pointer"
 		>
 			Damage
 		</button>
@@ -263,5 +251,9 @@
 	.green-checkbox:hover:checked,
 	.green-checkbox:after {
 		background-color: green;
+	}
+
+	.pointer {
+		cursor: pointer;
 	}
 </style>

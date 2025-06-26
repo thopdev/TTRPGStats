@@ -1,41 +1,58 @@
-import { Editor, MarkdownView, Modal, Notice, Plugin, TFile } from 'obsidian';
+import { Plugin, parseYaml, TFile, MetadataCache, type FrontMatterCache } from 'obsidian';
 import { mount, unmount } from 'svelte';
-import HitPoint from './Components/HitPoints.svelte';
 import { SettingTab } from './Plugin/SettingTab';
-import { updateProperties } from './Functions/updateProperties';
-
+import { PluginFileManager } from './Managers/PluginFileManager';
+import TrackerButtons from './TrackerButtons/TrackerButtons.svelte';
+import Tracker from './Tracker/Tracker.svelte';
+import HitPoint from './HitPoints/HitPoints.svelte';
 
 export default class TtrpgStatsPlugin extends Plugin {
 
 	settings: TtrpgStatsPluginSettings;
-	hitPointComponent: ReturnType<typeof HitPoint> | undefined;
+	components: [] = [];
+	pluginFileManagers: Map<string, PluginFileManager> = new Map();
 
 
 	async onload() {
+
 		await this.loadSettings();
-		debugger;
 		this.addSettingTab(new SettingTab(this.app, this));
 		this.registerComponent('ttrpgstats-hp', HitPoint);
+		this.registerComponent('ttrpgstats-tracker', Tracker);
+		this.registerComponent('ttrpgstats-button', TrackerButtons);
+		this.app.metadataCache.on('changed', this.onMetadataCacheChange.bind(this));
+
 	}
 
+	onMetadataCacheChange(changedFile: TFile) {
+		const pluginFileManager = this.pluginFileManagers.get(changedFile.path);
+		if (pluginFileManager) {
+			pluginFileManager.propertiesUpdated()
+		}
+	}
 
 	registerComponent(name: string, component: any) {
 
 		this.registerMarkdownCodeBlockProcessor(name, async (source, el, ctx) => {
 			try {
 				const file = this.app.vault.getAbstractFileByPath(ctx.sourcePath);
-				if (file && file instanceof TFile) {
-					const metadata = this.app.metadataCache.getFileCache(file);
-					const properties = metadata?.frontmatter;
 
-					this.hitPointComponent = mount(component, {
+				if (file && file instanceof TFile) {
+					let pluginFileManager = this.pluginFileManagers.get(file.path);
+					if (!pluginFileManager) {
+						pluginFileManager = new PluginFileManager(this.app, file);
+						this.pluginFileManagers.set(file.path, pluginFileManager);
+					}
+					const content = parseYaml(source) as Record<string, any>;
+
+					this.components.push(mount(component, {
 						target: el,
 						props: {
-							properties: properties,
 							settings: this.settings,
-							updateProperties: (updates: KeyValue[]) => updateProperties(this.app, file, updates)
+							content: content,
+							pluginFileManager: pluginFileManager,
 						}
-					});
+					}));
 				}
 			} catch (e) {
 				el.createEl('pre',
@@ -45,10 +62,14 @@ export default class TtrpgStatsPlugin extends Plugin {
 	}
 
 	onunload() {
-		if (this.hitPointComponent) {
-			unmount(this.hitPointComponent);
-			this.hitPointComponent = undefined;
+		for (const component of this.components) {
+
+			unmount(component);
 		}
+		this.components = [];
+		this.pluginFileManagers = new Map();
+
+		this.app.metadataCache.off('changed', this.onMetadataCacheChange);
 	}
 
 	async loadSettings() {
