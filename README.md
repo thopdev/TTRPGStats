@@ -22,14 +22,23 @@ Examples:
 ## Tracker
 Component use:
 \```ttrpgstats-tracker
+
 id: tracker1 
+
 name: Spell slots
+
 max: 5 
+
 color: Blue
+
 events:
+
   - name: short
+
     calc: devideMaxUp
+
   - event2
+
 \```
 Examples:
 
