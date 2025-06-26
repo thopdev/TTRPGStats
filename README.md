@@ -17,3 +17,29 @@ Examples:
 
 ![hp component](docs/resources/images/hp.png)
 ![hp with death save componenent](docs/resources/images/hp-deathsaves.png)
+
+
+## Tracker
+Component use:
+\```ttrpgstats-tracker
+id: tracker1 
+name: Spell slots
+max: 5 
+color: Blue
+events:
+  - name: short
+    calc: devideMaxUp
+  - event2
+\```
+Examples:
+
+![tracker](docs/resources/images/tracker.png)
+
+Config:
+id: string; // Required: Value used in properties to save current value
+name: string // Optional: Value displayed on the top
+max: number // Required: Max amount to track
+color: string // Optional: Color used inside the checkbox
+events: // Optional: Used to change value with button
+  - name: string // Required: Name used for the event
+    calc: zero | max | decrease | increase | devideMaxUp | devideMaxDown | double // Optional: Default zero 
