@@ -35,11 +35,23 @@ Examples:
 
 ![tracker](docs/resources/images/tracker.png)
 
-Config:
-id: string; // Required: Value used in properties to save current value
-name: string // Optional: Value displayed on the top
+**TrackerConfig**:
+| Name   | Type         | Required | Default | Comment                                        |
+|--------|--------------|----------|---------|------------------------------------------------|
+| id     | string       | Yes      |         | Value used in properties to save current value |
+| name   | string       | No       |         | Value displayed on the top                     |
+| max    | number       | Yes      |         | Max amount to track                            |
+| color  | string       | No       | Blue    | Value displayed on the top                     |
+| events | TrackerEvent | No       |         | Used to change values with button              |
+
+**TrackerEvent**
+| Name | Type                                                              | Required | Default | Comment                        |
+|------|-------------------------------------------------------------------|----------|---------|--------------------------------|
+| name | string                                                            | yes      |         | Name used for the event        |
+| calc | zero, max, decrease, increase, devideMaxUp, devideMaxDown, double | Yes      | zero    | Action when event is triggered |
+
 max: number // Required: Max amount to track
 color: string // Optional: Color used inside the checkbox
 events: // Optional: Used to change value with button
   - name: string // Required: Name used for the event
-    calc: zero | max | decrease | increase | devideMaxUp | devideMaxDown | double // Optional: Default zero 
+    calc: zero, max, decrease, increase, devideMaxUp, devideMaxDown, double // Optional: Default zero 
