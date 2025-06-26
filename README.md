@@ -21,25 +21,17 @@ Examples:
 
 ## Tracker
 Component use:
-\```ttrpgstats-tracker
-
+ttrpgstats-tracker
+```yaml
 id: tracker1 
-
 name: Spell slots
-
 max: 5 
-
 color: Blue
-
 events:
-
   - name: short
-
     calc: devideMaxUp
-
   - event2
-
-\```
+```
 Examples:
 
 ![tracker](docs/resources/images/tracker.png)
