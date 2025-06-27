@@ -1,6 +1,14 @@
 # TTRPG Stats 
 TTRPGStats is a plugin for obsidian that allows you create your character sheet in obsidian with dynamic components that allow you to track your hp, spellslots, gold and way more.
 
+## Disclaimer
+<span style="color:red">Currently obsidian is still in the progress to submit this plugin. </span>
+
+[Pull request](https://github.com/obsidianmd/obsidian-releases/pull/6847)
+
+**Workaround:**
+You can install the plugin [BRAT](https://obsidian.md/plugins?id=obsidian42-brat)
+and then add the folowing repo: https://github.com/thopdev/TTRPGStats
 # How to use
 You can create the components by creating a code block with the name of the component example:
 
