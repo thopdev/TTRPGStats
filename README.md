@@ -72,6 +72,7 @@ buttons:
 ```
 
 Examples: 
+
 ![tracker-buttons](docs/resources/images/tracker-buttons.png)
 
 ## Config
