@@ -1,10 +1,12 @@
 import { Plugin, parseYaml, TFile, MetadataCache, type FrontMatterCache } from 'obsidian';
 import { mount, unmount } from 'svelte';
-import { SettingTab } from './Plugin/SettingTab';
 import { PluginFileManager } from './Managers/PluginFileManager';
 import TrackerButtons from './TrackerButtons/TrackerButtons.svelte';
 import Tracker from './Tracker/Tracker.svelte';
 import HitPoint from './HitPoints/HitPoints.svelte';
+import Money from './Money/Money.svelte';
+
+import { TtrpgStatsSettingTab } from './Settings/SettingTab';
 
 export default class TtrpgStatsPlugin extends Plugin {
 
@@ -16,10 +18,12 @@ export default class TtrpgStatsPlugin extends Plugin {
 	async onload() {
 
 		await this.loadSettings();
-		this.addSettingTab(new SettingTab(this.app, this));
+		this.addSettingTab(new TtrpgStatsSettingTab(this.app, this));
 		this.registerComponent('ttrpgstats-hp', HitPoint);
 		this.registerComponent('ttrpgstats-tracker', Tracker);
 		this.registerComponent('ttrpgstats-button', TrackerButtons);
+		this.registerComponent('ttrpgstats-valuta', Money);
+
 		this.app.metadataCache.on('changed', this.onMetadataCacheChange.bind(this));
 
 	}

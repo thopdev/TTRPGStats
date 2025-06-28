@@ -2,7 +2,7 @@ import { PluginSettingTab, App, Setting } from 'obsidian';
 import type TtrpgStatsPlugin from '../main';
 
 
-export class SettingTab extends PluginSettingTab {
+export class TtrpgStatsSettingTab extends PluginSettingTab {
     plugin: TtrpgStatsPlugin;
 
     constructor(app: App, plugin: TtrpgStatsPlugin) {
