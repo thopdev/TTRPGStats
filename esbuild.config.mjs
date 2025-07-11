@@ -3,6 +3,7 @@ import process from "process";
 import builtins from "builtin-modules";
 import esbuildSvelte from 'esbuild-svelte';
 import { sveltePreprocess } from 'svelte-preprocess';
+import tailwindcss from '@tailwindcss/vite'
 
 const banner =
 `/*
@@ -20,6 +21,7 @@ const context = await esbuild.context({
 	entryPoints: ["src/main.ts"],
 	bundle: true,
 	plugins: [
+	tailwindcss(),
    esbuildSvelte({
       compilerOptions: { css: 'injected' },
       preprocess: sveltePreprocess(),
