@@ -4,6 +4,7 @@ import builtins from "builtin-modules";
 import esbuildSvelte from 'esbuild-svelte';
 import { sveltePreprocess } from 'svelte-preprocess';
 import tailwindcss from '@tailwindcss/vite'
+import { copyFileSync } from "fs";
 
 const banner =
 `/*
@@ -14,12 +15,20 @@ if you want to view the source, please visit the github repository of this plugi
 
 const prod = (process.argv[2] === "production");
 
+const dest =  prod ? "public" : "test-vault/.obsidian/plugins/ttrpg-stats";
+
+// Copy manifest
+const manifestSrc = "manifest.json";
+const manifestDest =	dest + "/manifest.json";
+copyFileSync(manifestSrc, manifestDest);
+
 const context = await esbuild.context({
 	banner: {
 		js: banner,
 	},
 	entryPoints: ["src/main.ts"],
 	bundle: true,
+	outdir: dest,
 	plugins: [
 	tailwindcss(),
    esbuildSvelte({
@@ -47,7 +56,6 @@ const context = await esbuild.context({
 	logLevel: "info",
 	sourcemap: prod ? false : "inline",
 	treeShaking: true,
-	outfile: "main.js",
 	minify: prod,
 });
 

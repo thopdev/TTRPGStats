@@ -11,10 +11,14 @@
             "id": "bb4ae43ff46f23c4",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "Tracker/Default.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "New tab"
+              "title": "Default"
             }
           }
         ]
@@ -163,12 +167,12 @@
   },
   "active": "bb4ae43ff46f23c4",
   "lastOpenFiles": [
-    "Tracker/Default.md",
     "Readme.md",
     "Valuta/Default.md",
     "HP/Death.md",
     "HP/Default.md",
     "Tracker/Error.md",
+    "Tracker/Default.md",
     "HP",
     "Valuta",
     "Tracker"
