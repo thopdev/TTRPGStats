@@ -1,4 +1,4 @@
-import type { ConfigError } from 'src/Error/ConfigError';
+import { ConfigError } from '@src/Error/ConfigError';
 
 
 
@@ -7,6 +7,6 @@ export class ConfigResult<T> {
         Object.assign(this, init);
     }
 
-    public value: T;
-    public error: ConfigError;
+    public value: T | undefined;
+    public error: ConfigError | undefined;
 }

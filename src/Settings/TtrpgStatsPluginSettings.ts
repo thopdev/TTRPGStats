@@ -1,4 +1,4 @@
-interface TtrpgStatsPluginSettings {
+export interface TtrpgStatsPluginSettings {
     maxHealthPropertyName: string;
     currentHealthPropertyName: string;
 

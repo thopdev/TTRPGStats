@@ -1,16 +1,19 @@
-import { Plugin, parseYaml, TFile, MetadataCache, type FrontMatterCache } from 'obsidian';
+import './styles.css'
+
+import { Plugin, parseYaml, TFile } from 'obsidian';
 import { mount, unmount } from 'svelte';
-import { PluginFileManager } from './Managers/PluginFileManager';
-import TrackerButtons from './TrackerButtons/TrackerButtons.svelte';
-import Tracker from './Tracker/Tracker.svelte';
-import HitPoint from './HitPoints/HitPoints.svelte';
-import Money from './Money/Money.svelte';
+import { PluginFileManager } from '@src/Managers/PluginFileManager';
+import TrackerButtons from '@src/TrackerButtons/TrackerButtons.svelte';
+import Tracker from '@src/Tracker/Tracker.svelte';
+import HitPoint from '@src/HitPoints/HitPoints.svelte';
+import Money from '@src/Money/Money.svelte';
 
 import { TtrpgStatsSettingTab } from './Settings/SettingTab';
+import type { TtrpgStatsPluginSettings } from './Settings/TtrpgStatsPluginSettings';
 
 export default class TtrpgStatsPlugin extends Plugin {
 
-	settings: TtrpgStatsPluginSettings;
+	settings: TtrpgStatsPluginSettings | undefined;
 	components: [] = [];
 	pluginFileManagers: Map<string, PluginFileManager> = new Map();
 

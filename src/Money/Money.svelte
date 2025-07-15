@@ -1,88 +1,189 @@
 <script lang="ts">
-	import { TrackerEventModel } from "src/Events/TrackerEventModel";
-	import type { DefaultComponentProperties } from "src/General/Models/DefaultComponentProperties";
+	import type { DefaultComponentProperties } from "@src/General/Models/DefaultComponentProperties";
 	import { ToMoneyConfig, ValutaConfig } from "./MoneyConfig";
+	import { ValutaData } from "./MoneyData.svelte";
 
 	let { settings, content, pluginFileManager }: DefaultComponentProperties =
 		$props();
 
-	let values = new Map<ValutaConfig, number>();
+	const id = crypto.randomUUID().toString();
 
-	let { value: money, error } = ToMoneyConfig(content);
+	let { value: config, error } = ToMoneyConfig(content);
+	let values: ValutaData[] = $state([]);
+	let totalMoney = $state(
+		pluginFileManager.properties[config?.id ?? ""] ?? 0,
+	);
 
-	money.valutas.forEach((valuta) => {
-		let value = pluginFileManager.properties[valuta.name];
-		if (!value) {
-			value = 0;
+	let paymentErrors: ValutaData[] = $state([]);
+
+	const defaultValue = config?.valutas.find((x) => x.defaultValue);
+	config.valutas.forEach((valuta) => {
+		let value = 0;
+
+		if (config?.convert != true) {
+			value = pluginFileManager.properties[valuta.name] ?? 0;
 		}
-		values.set(valuta, value);
+		values.push(new ValutaData(valuta, value));
 	});
 
-	function calculate() {
-		let total = 0;
-		values.forEach((amount, valuta) => {
-			total += amount * (valuta.multiplier ?? 1);
-		});
-		return Math.floor(
-			total /
-				(money.valutas.find((x) => x.defaultValue)?.multiplier ?? 1),
+	if (config?.convert) {
+		convertValutas();
+	}
+
+	function calculate(getValue: (valuta: ValutaData) => number) {
+		return values.reduce(
+			(total, valuta) =>
+				total + getValue(valuta) * (valuta.config.multiplier ?? 1),
+			0,
 		);
+	}
+
+	function calculateTotal() {
+		return Math.floor(
+			calculate((v) => v.value) / (defaultValue?.multiplier ?? 1),
+		);
+	}
+
+	function add() {
+		if (config?.convert) {
+			totalMoney += calculate((v) => v.inputValue);
+			saveTotalMoney();
+
+			convertValutas();
+		} else {
+			values.forEach((data) => {
+				data.value += data.inputValue;
+			});
+			saveValutas();
+		}
+		clear();
+	}
+
+	function remove() {
+		if (config?.convert) {
+			const moneyToRemove = calculate((v) => v.inputValue);
+			if (moneyToRemove > totalMoney && config?.allowNegative != true) {
+				paymentErrors = values.filter((x) => x.inputValue != 0);
+				return;
+			}
+			totalMoney -= moneyToRemove;
+			saveTotalMoney();
+			convertValutas();
+			return;
+		} else {
+			if (config?.allowNegative != true) {
+				paymentErrors = values.filter(
+					(data) => data.inputValue > data.value,
+				);
+				if (paymentErrors.length > 0) {
+					return;
+				}
+			}
+			values.forEach((data) => {
+				data.value -= data.inputValue;
+			});
+			saveValutas();
+		}
+		clear();
+		return;
+	}
+
+	function convertValutas() {
+		let moneyLeft = totalMoney;
+
+		values
+			.toSorted((a, b) => a.config.multiplier - b.config.multiplier)
+			.toReversed()
+			.forEach((v) => {
+				const moneyToRemove = Math.trunc(
+					moneyLeft / v.config.multiplier,
+				);
+
+				v.value = moneyToRemove;
+				moneyLeft -= moneyToRemove * v.config.multiplier;
+			});
+	}
+
+	function clear() {
+		values.forEach((data) => {
+			data.inputValue = 0;
+		});
+	}
+
+	function saveTotalMoney() {
+		pluginFileManager.properties[config?.id ?? ""] = totalMoney;
+		pluginFileManager.saveProperties(id);
+	}
+
+	function saveValutas() {
+		values.forEach(
+			(x) => (pluginFileManager.properties[x.config.name] = x.value),
+		);
+		pluginFileManager.saveProperties(id);
 	}
 </script>
 
-<div class="grid">
-	<div>Total {money.valutas.find((x) => x.defaultValue).name}</div>
-	<div>{calculate()}</div>
-	{#each Array.from(values.entries()) as [valuta, amount]}
-		<div class="capitalize">{valuta.name}</div>
-		<div>{amount}</div>
-	{/each}
-</div>
+<div class="flex flex-col gap-2">
+	<div class="grid grid-cols-6">
+		{#if defaultValue}
+			<div class="col-span-5">
+				<b>
+					Total {defaultValue.name}
+				</b>
+			</div>
+			<div><b> {calculateTotal()}</b></div>
+		{/if}
+		{#each values.filter((v) => config?.displayNull || v.value != 0) as data}
+			{#key data.value}
+				<div class="col-span-5 capitalize">{data.config.name}</div>
+				<div>{data.value}</div>
+			{/key}
+		{/each}
+	</div>
 
-<div class="container row width">
-	{#each Array.from(values.entries()) as [valuta, amount]}
-		<div class="container">
-			<div class="capitalize text-center w-full">{valuta.name}</div>
-			<input
-				class="input-width"
-				type="number"
-				size="4"
-				inputmode="decimal"
-			/>
-		</div>
-	{/each}
-</div>
-<div class="container row">
-	<button style="flex-grow: 1;"> Add </button>
-	<button style="flex-grow: 1;"> Remove </button>
-	<button style="flex-grow: 1;"> Clear </button>
+	<div class="flex gap-2">
+		{#each values as data}
+			<div class="flex flex-col w-full gap">
+				<div class="capitalize text-center">{data.config.name}</div>
+				<div class="flex flex-col">
+					<input
+						class="w-full {paymentErrors.some((x) => x == data)
+							? 'form-error'
+							: ''}"
+						type="number"
+						size="4"
+						inputmode="decimal"
+						bind:value={data.inputValue}
+					/>
+				</div>
+			</div>
+		{/each}
+	</div>
+	{#if paymentErrors.length > 0}
+		<div class="text-red">Values could not be removed</div>
+	{/if}
+	<div class="flex gap-2">
+		<button class="grow text-lg cursor-pointer" onclick={add}> Add </button>
+		<button class="grow text-lg cursor-pointer" onclick={remove}>
+			Remove
+		</button>
+		<button class="grow text-lg cursor-pointer" onclick={clear}>
+			Clear
+		</button>
+	</div>
 </div>
 
 <style>
-	.input-width {
-		width: 60px;
+	.text-lg {
+		font-size: 1.05rem;
 	}
 
-	.container {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		gap: 0.5em;
+	.cursor-pointer {
+		cursor: pointer;
 	}
 
-	.grid {
-		display: grid;
-		grid-template-columns: 80% 20%;
-	}
-
-	.row {
-		flex-direction: row;
-	}
-	.capitalize {
-		text-transform: capitalize;
-	}
-
-	.a {
-		text-align: center;
+	.form-error {
+		border-color: var(--color-red);
+		border-width: 2px;
 	}
 </style>

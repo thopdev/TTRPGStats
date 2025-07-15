@@ -1,0 +1,137 @@
+@import "tailwindcss";
+
+@theme {
+  /* Colors */
+  --color-base-00: var(--color-base-00);
+  --color-base-05: var(--color-base-05);
+  --color-base-10: var(--color-base-10);
+  --color-base-20: var(--color-base-20);
+  --color-base-25: var(--color-base-25);
+  --color-base-30: var(--color-base-30);
+  --color-base-35: var(--color-base-35);
+  --color-base-40: var(--color-base-40);
+  --color-base-50: var(--color-base-50);
+  --color-base-60: var(--color-base-60);
+  --color-base-70: var(--color-base-70);
+  --color-base-100: var(--color-base-100);
+
+  --color-red: var(--color-red);
+  --color-orange: var(--color-orange);
+  --color-yellow: var(--color-yellow);
+  --color-green: var(--color-green);
+  --color-cyan: var(--color-cyan);
+  --color-blue: var(--color-blue);
+  --color-purple: var(--color-purple);
+  --color-pink: var(--color-pink);
+  --color-gray: var(--color-gray);
+
+  /* Background colors */
+  --color-background-primary: var(--background-primary);
+  --color-background-primary-alt: var(--background-primary-alt);
+  --color-background-secondary: var(--background-secondary);
+  --color-background-secondary-alt: var(--background-secondary-alt);
+
+  --color-background-modifier-hover: var(--background-modifier-hover);
+  --color-background-modifier-active-hover: var(--background-modifier-active-hover);
+  --color-background-modifier-border: var(--background-modifier-border);
+  --color-background-modifier-border-hover: var(--background-modifier-border-hover);
+  --color-background-modifier-border-focus: var(--background-modifier-border-focus);
+  --color-background-modifier-error: var(--background-modifier-error);
+  --color-background-modifier-success: var(--background-modifier-success);
+  --color-background-modifier-message: var(--background-modifier-message);
+  --color-background-modifier-form-field: var(--background-modifier-form-field);
+
+  /* Interactive colors */
+  --color-interactive-normal: var(--interactive-normal);
+  --color-interactive-hover: var(--interactive-hover);
+  --color-interactive-accent: var(--interactive-accent);
+  --color-interactive-accent-hover: var(--interactive-accent-hover);
+
+  /* Text colors */
+  --color-text-normal: var(--text-normal);
+  --color-text-muted: var(--text-muted);
+  --color-text-faint: var(--text-faint);
+  --color-text-on-accent: var(--text-on-accent);
+  --color-text-on-accent-inverted: var(--text-on-accent-inverted);
+  --color-text-success: var(--text-success);
+  --color-text-warning: var(--text-warning);
+  --color-text-error: var(--text-error);
+  --color-text-accent: var(--text-accent);
+  --color-text-accent-hover: var(--text-accent-hover);
+  --color-text-selection: var(--text-selection);
+  --color-text-highlight-bg: var(--text-highlight-bg);
+  --color-text-bold: var(--bold-color);
+  --color-text-italic: var(--italic-color);
+
+  /* Border */
+  --border-width: var(--border-width);
+
+  /* Border radius */
+  --radius-clickable-icon: var(--clickable-icon-radius);
+  --radius-s: var(--radius-s);
+  --radius-m: var(--radius-m);
+  --radius-l: var(--radius-l);
+  --radius-xl: var(--radius-xl);
+
+  /* Z-index */
+  --z-cover: var(--layer-cover);
+  --z-sidedock: var(--layer-sidedock);
+  --z-status-bar: var(--layer-status-bar);
+  --z-popover: var(--layer-popover);
+  --z-slides: var(--layer-slides);
+  --z-modal: var(--layer-modal);
+  --z-notice: var(--layer-notice);
+  --z-menu: var(--layer-menu);
+  --z-tooltip: var(--layer-tooltip);
+  --z-dragged-item: var(--layer-dragged-item);
+
+  /* Font sizes */
+  --text-text: var(--font-text-size);
+  --text-smallest: var(--font-smallest);
+  --text-smaller: var(--font-smaller);
+  --text-small: var(--font-small);
+  --text-ui-smaller: var(--font-ui-smaller);
+  --text-ui-small: var(--font-ui-small);
+  --text-ui-medium: var(--font-ui-medium);
+  --text-ui-larger: var(--font-ui-larger);
+
+  /* Stroke widths */
+  --stroke-width-icon: var(--icon-stroke);
+  --stroke-width-icon-xs: var(--icon-xs-stroke-width);
+  --stroke-width-icon-s: var(--icon-s-stroke-width);
+  --stroke-width-icon-m: var(--icon-m-stroke-width);
+  --stroke-width-icon-l: var(--icon-l-stroke-width);
+  --stroke-width-icon-xl: var(--icon-xl-stroke-width);
+
+  /* Font weights */
+  --font-weight-thin: var(--font-thin);
+  --font-weight-extralight: var(--font-extralight);
+  --font-weight-light: var(--font-light);
+  --font-weight-normal: var(--font-normal);
+  --font-weight-medium: var(--font-medium);
+  --font-weight-semibold: var(--font-semibold);
+  --font-weight-bold: var(--font-bold);
+  --font-weight-extrabold: var(--font-extrabold);
+  --font-weight-black: var(--font-black);
+
+  /* Line heights */
+  --leading-normal: var(--line-height-normal);
+  --leading-tight: var(--line-height-tight);
+
+  /* Sizes */
+  --size-icon: var(--icon-size);
+  --size-icon-xs: var(--icon-xs);
+  --size-icon-s: var(--icon-s);
+  --size-icon-m: var(--icon-m);
+  --size-icon-l: var(--icon-l);
+  --size-icon-xl: var(--icon-xl);
+  --size-checkbox: var(--checkbox-size);
+
+  /* Opacity */
+  --opacity-icon: var(--icon-opacity);
+  --opacity-icon-hover: var(--icon-opacity-hover);
+  --opacity-icon-active: var(--icon-opacity-active);
+
+  /* Cursor */
+  --cursor-default: var(--cursor);
+}

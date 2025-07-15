@@ -1,33 +1,38 @@
 {
-	"name": "ttrpg-stats",
-	"version": "1.1.1",
-	"description": "TTRPG Stats allows you create your character sheet in obsidian with dynamic components that allow you to track your hp, spellslots, gold and way more.",
-	"main": "main.js",
-	"scripts": {
-		"dev": "node esbuild.config.mjs",
-		"build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
-		"version": "node version-bump.mjs && git add manifest.json versions.json",
-		"svelte-check": "svelte-check --tsconfig tsconfig.json"
-	},
-	"keywords": [],
-	"author": "",
-	"license": "MIT",
-	"devDependencies": {
-		"@types/node": "^16.11.6",
-		"@typescript-eslint/eslint-plugin": "5.29.0",
-		"@typescript-eslint/parser": "5.29.0",
-		"builtin-modules": "3.3.0",
-		"esbuild": "0.25.6",
-		"esbuild-svelte": "^0.9.3",
-		"obsidian": "latest",
-		"svelte": "^5.34.7",
-		"svelte-check": "^4.2.2",
-		"svelte-preprocess": "^6.0.3",
-		"tslib": "2.4.0",
-		"typescript": "~5.0.0"
-	},
-	"dependencies": {
-		"@tailwindcss/vite": "^4.1.11",
-		"tailwindcss": "^4.1.11"
-	}
+  "name": "ttrpg-stats",
+  "private": true,
+  "version": "0.0.1",
+  "description": "A template for building Obsidian plugins with Svelte 5",
+  "author": "Steven Stavrakis",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/StevenStavrakis/obsidian-plugin-svelte-template"
+  },
+  "type": "module",
+  "scripts": {
+    "setup": "node setupScript.mjs",
+    "update": "node updateScript.mjs",
+    "verify": "node verifySetup.mjs",
+    "preinstall": "node verifySetup.mjs",
+    "dev": "vite build --mode development --watch",
+    "build": "node verifySetup.mjs && vite build --mode production",
+    "preview": "vite preview",
+    "check": "svelte-check --tsconfig ./tsconfig.json && tsc -p tsconfig.node.json"
+  },
+  "devDependencies": {
+    "@clack/prompts": "^0.9.0",
+    "@sveltejs/vite-plugin-svelte": "^5.0.2",
+    "@tsconfig/svelte": "^5.0.4",
+    "svelte": "^5.14.3",
+    "svelte-check": "^4.1.1",
+    "tslib": "^2.8.1",
+    "typescript": "~5.6.2",
+    "vite": "^6.0.3"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "^4.0.0-beta.8",
+    "@types/node": "^22.10.2",
+    "obsidian": "^1.7.2",
+    "tailwindcss": "^4.0.0-beta.8"
+  }
 }

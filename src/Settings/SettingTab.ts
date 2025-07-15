@@ -1,11 +1,10 @@
-import { PluginSettingTab, App, Setting } from 'obsidian';
-import type TtrpgStatsPlugin from '../main';
-
+import type TtrpgStatsPlugin from '@src/main';
+import { PluginSettingTab, Setting } from 'obsidian';
 
 export class TtrpgStatsSettingTab extends PluginSettingTab {
     plugin: TtrpgStatsPlugin;
 
-    constructor(app: App, plugin: TtrpgStatsPlugin) {
+    constructor(app: any, plugin: TtrpgStatsPlugin) {
         super(app, plugin);
         this.plugin = plugin;
     }
