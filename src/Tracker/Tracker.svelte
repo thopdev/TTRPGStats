@@ -10,7 +10,7 @@
 		$props();
 
 	let { value: config, error: configError } = ToTrackerConfig(content);
-	debugger;
+
 	let currentValue: number = $state(0);
 
 	if (config !== undefined && config !== null) {

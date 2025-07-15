@@ -1,7 +1,8 @@
-import type { PluginFileManager } from "../../Managers/PluginFileManager";
+import { PluginFileManager } from "@src/Managers/PluginFileManager";
+import type { TtrpgStatsPluginSettings } from "@src/Settings/TtrpgStatsPluginSettings";
 
 export interface DefaultComponentProperties {
-    settings: TtrpgStatsPluginSettings,
+    settings: TtrpgStatsPluginSettings | undefined,
     content?: Record<string, any> | undefined;
     pluginFileManager: PluginFileManager
 }

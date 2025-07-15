@@ -1,22 +1,29 @@
-# vscode
-.vscode 
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
 
-# Intellij
-*.iml
-.idea
-
-# npm
 node_modules
+dist
+dist-ssr
+*.local
 
-# Don't include the compiled main.js file in the repo.
-# They should be uploaded to GitHub releases instead.
-main.js
-
-# Exclude sourcemaps
-*.map
-
-# obsidian
-data.json
-
-# Exclude macOS Finder (System Explorer) View States
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
 .DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Obsidian config files
+test-vault/.obsidian/*.json
+test-vault/.obsidian/plugins/*
+!test-vault/.obsidian/plugins/hot-reload/

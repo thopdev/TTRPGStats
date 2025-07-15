@@ -1,7 +1,7 @@
 import { stringifyYaml, type App, type FrontMatterCache, type TFile } from "obsidian";
-import { EmptyPluginEvent } from "src/Events/EmptyPluginEvent";
-import { PluginEvent } from "src/Events/PluginEvent";
-import type { TrackerEventModel } from "src/Events/TrackerEventModel";
+import { PluginEvent } from "@src/Events/PluginEvent";
+import { TrackerEventModel } from "@src/Events/TrackerEventModel";
+import { EmptyPluginEvent } from "@src/Events/EmptyPluginEvent";
 
 export class PluginFileManager {
 

@@ -1,6 +1,3 @@
-import type { TrackerEventModel } from "./TrackerEventModel";
-
-
 export class EmptyPluginEvent {
 
     private listeners = new Map<string, Function>();

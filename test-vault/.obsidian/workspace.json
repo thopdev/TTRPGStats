@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Tracker/Default.md",
+                "file": "Valuta/Default.md",
                 "mode": "source",
                 "source": false
               },
@@ -167,14 +167,14 @@
   },
   "active": "bb4ae43ff46f23c4",
   "lastOpenFiles": [
-    "Readme.md",
-    "Valuta/Default.md",
-    "HP/Death.md",
-    "HP/Default.md",
-    "Tracker/Error.md",
     "Tracker/Default.md",
-    "HP",
+    "Valuta/Default.md",
+    "HP/Default.md",
+    "Readme.md",
+    "HP/Death.md",
+    "Tracker/Error.md",
     "Valuta",
-    "Tracker"
+    "Tracker",
+    "HP"
   ]
 }
