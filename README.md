@@ -1,92 +1,161 @@
-# Obsidian Plugin Template (Svelte)
+# TTRPG Stats 
+TTRPGStats is a plugin for obsidian that allows you create your character sheet in obsidian with dynamic components that allow you to track your hp, spellslots, gold and way more.
 
-A template for creating Obsidian plugins using Svelte and TypeScript.
+## Disclaimer
+<span style="color:red">Currently obsidian is still in the progress to submit this plugin. </span>
 
-## Features & Tech Stack
+[Pull request](https://github.com/obsidianmd/obsidian-releases/pull/6847)
 
-This template provides a modern development environment for building Obsidian plugins:
+**Workaround:**
+You can install the plugin [BRAT](https://obsidian.md/plugins?id=obsidian42-brat)
+and then add the folowing repo: https://github.com/thopdev/TTRPGStats
+# How to use
+You can create the components by creating a code block with the name of the component example:
 
-- **Frontend Framework**: [Svelte](https://svelte.dev/) for reactive UI components with minimal boilerplate
-- **Build System**: [Vite](https://vitejs.dev/) for fast development and optimized builds
-- **Styling**: 
-  - [Tailwind CSS](https://tailwindcss.com/) v4.x beta for utility-first styling
-  - Note: Tailwind classes will NOT override Obsidian's default styles
-- **Type Safety**: Full TypeScript support with pre-configured types for Obsidian API
-- **Development Experience**:
-  - Hot Module Replacement (HMR) for instant feedback
-  - Automatic plugin reloading in development vault
-  - Built-in development safeguards and verification
+ \```ttrpgstats-hp
 
-## Getting Started
+ \```
 
-1. **Initial Setup (Required)**
-   ```bash
-   # Install dependencies
-   npm install
 
-   # Run the setup script to configure your plugin
-   npm run setup
-   ```
-   The setup script will prompt you for:
-   - Plugin name
-   - Description
-   - Author name
-   - Author URL
 
-   This will automatically:
-   - Update package.json with your plugin's name
-   - Generate manifest.json with your plugin's metadata
 
-2. **Development**
-   ```bash
-   npm run dev
-   ```
-   This will:
-   - Create the plugin directory in your development vault
-   - Build your plugin in development mode
-   - Watch for changes
-   - Hot reload the plugin in your development vault (MAKE SURE TO ACTIVATE THE HOT-RELOAD PLUGIN)
 
-3. **Production Build**
-   ```bash
-   npm run build
-   ```
-   This creates a production build of your plugin.
 
-## Project Structure
 
-- `src/` - Source code
-  - `main.ts` - Plugin entry point
-  - `modules/` - Plugin modules and components
-- `public/` - Static files
-  - `manifest.json` - Plugin manifest (auto-generated)
-- `test-vault/` - Development vault for testing
 
-## Development Safeguards
 
-This template includes automatic verification to ensure:
-- Setup script has been run before development
-- Plugin name consistency across package.json, manifest.json, and plugin directory
-- All required plugin metadata is present
 
-If you encounter errors about missing setup or mismatched names, run:
-```bash
-npm run setup
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ The plugin uses your properties to save data. This allows you to view and edit them without the plugin. The name for the properties can be configured from the settings.
+
+# Components
+## HP - Hitpoints
+Component use: ttrpgstats-hp
+Examples:
+
+![hp component](docs/resources/images/hp.png)
+![hp with death save componenent](docs/resources/images/hp-deathsaves.png)
+
+
+
+
+## Tracker
+Component use:
+ttrpgstats-tracker
+```yaml
+id: tracker1 
+name: Spell slots
+max: 5 
+color: Blue
+events:
+  - name: short
+    calc: devideMaxUp
+  - event2
+```
+Examples:
+
+![tracker](docs/resources/images/tracker.png)
+
+## Config
+### TrackerConfig
+| Name   | Type           | Required | Default | Comment                                        |
+|--------|----------------|----------|---------|------------------------------------------------|
+| id     | string         | Yes      |         | Value used in properties to save current value |
+| name   | string         | No       |         | Value displayed on the top                     |
+| max    | number         | Yes      |         | Max amount to track                            |
+| color  | string         | No       | Blue    | Value displayed on the top                     |
+| events | TrackerEvent[] | No       |         | Used to change values with button              |
+
+### TrackerEvent
+| Name | Type                                                              | Required | Default | Comment                        |
+|------|-------------------------------------------------------------------|----------|---------|--------------------------------|
+| name | string                                                            | yes      |         | Name used for the event        |
+| calc | zero, max, decrease, increase, devideMaxUp, devideMaxDown, double | Yes      | zero    | Action when event is triggered |
+
+max: number // Required: Max amount to track
+color: string // Optional: Color used inside the checkbox
+events: // Optional: Used to change value with button
+  - name: string // Required: Name used for the event
+    calc: zero, max, decrease, increase, devideMaxUp, devideMaxDown, double // Optional: Default zero 
+
+## Tracker Button
+Component use:
+ttrpgstats-button
+```yaml
+buttons:
+ - name: Rest
+   id: short
+   color: green
+ - name: Long
+   id: long
+   color: red
 ```
 
-## IDE Setup
+Examples: 
 
-[VS Code](https://code.visualstudio.com/) is recommended with the following extensions:
-- [Svelte for VS Code](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode)
-- [TypeScript and JavaScript Language Features](https://marketplace.visualstudio.com/items?itemName=vscode.typescript-language-features)
+![tracker-buttons](docs/resources/images/tracker-buttons.png)
 
-## FAQ
+## Config
+### TrackerButtonListConfig
+| Name    | Type                  | Required | Default | Comment                           |
+|---------|-----------------------|----------|---------|-----------------------------------|
+| buttons | TrackerButtonConfig[] | Yes      |         | Array containing the buttons      |
+| name    | string                | No       |         | Value displayed on the top        |
+| max     | number                | Yes      |         | Max amount to track               |
+| color   | string                | No       | Blue    | Color used for checkbox           |
+| events  | TrackerEvent          | No       |         | Used to change values with button |
 
-### Why aren't my Tailwind styles working?
-Due to the way Tailwind v4.x beta works, some Tailwind classes will work while others won't, particularly when trying to override default Obsidian styles. This is a known limitation and is being investigated for a potential fix.
-
-### Hot-reloading isn't working
-Make sure the Hot-Reload plugin is active in your Obsidian vault. This plugin is required for the development hot-reloading functionality to work properly.
-
-### Something isn't allowing me to turn on my plugin
-Restart Obsidian and try activating your plugin again. There are some temporary files that can cause issues with plugin activation.
+### TrackerButtonConfig
+| Name | Type   | Required | Default | Comment                                         |
+|------|--------|----------|---------|-------------------------------------------------|
+| name | string | Yes      |         | Name inside the button                          |
+| id   | number | Yes      |         | Id of event that is trigged, as used in tracker |
+| color | string | No       | White   | Color of the button                   
