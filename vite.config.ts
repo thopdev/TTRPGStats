@@ -58,7 +58,7 @@ export default defineConfig(({ mode }) => {
       // inline sourcemaps in dev for debugging
       sourcemap: inProd ? false : 'inline',
       outDir: inProd ? './public' : PLUGIN_PATH,
-      emptyOutDir: inProd,
+      emptyOutDir: false,
       rollupOptions: {
         input: {
           main: path.resolve(__dirname, './src/main.ts'),
