@@ -57,7 +57,7 @@ export default defineConfig(({ mode }) => {
       minify: inProd,
       // inline sourcemaps in dev for debugging
       sourcemap: inProd ? false : 'inline',
-      outDir: inProd ? './dist' : PLUGIN_PATH,
+      outDir: inProd ? './public' : PLUGIN_PATH,
       emptyOutDir: inProd,
       rollupOptions: {
         input: {

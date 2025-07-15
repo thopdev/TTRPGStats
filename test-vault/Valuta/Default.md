@@ -7,6 +7,15 @@ electrum: 0
 silver: 0
 copper: 0
 ---
+---
+convert: 4160
+convertnegative: 15950
+gold: 50
+platium: 1
+electrum: 0
+silver: 0
+copper: 0
+---
 ```ttrpgstats-valuta
 id: test
 valutas:

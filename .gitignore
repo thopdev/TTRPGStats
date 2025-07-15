@@ -26,3 +26,6 @@ dist-ssr
 # Obsidian config files
 test-vault/.obsidian/*.json
 test-vault/.obsidian/plugins/*
+
+public/main.js
+public/styles.css
