@@ -23,7 +23,7 @@ jobs:
       - name: Build plugin
         run: |
           npm install
-          npm run update
+          npm run updateversion
           npm run build
 
       - name: Commit updated files
