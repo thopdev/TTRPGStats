@@ -15,16 +15,6 @@ import manifest from './public/manifest.json' with { type: 'json' };
 // Plugin configuration
 const PLUGIN_PATH = path.join('test-vault', '.obsidian', 'plugins', manifest.id);
 const PLUGIN_URL = pathToFileURL(path.join(__dirname, PLUGIN_PATH)).toString();
-const TEST_VAULT_PATH = path.join(PLUGIN_PATH, 'test-vault');
-
-
-const logWatchedFiles: Plugin = {
-  name: 'log-watched-files',
-  watchChange(id) {
-    console.log('[WATCH CHANGE]', id);
-
-  }
-};
 
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
@@ -47,14 +37,14 @@ export default defineConfig(({ mode }) => {
   };
 
   return {
-    plugins: [svelte(), tailwindcss(), hotReloadPlugin, logWatchedFiles],
+    plugins: [svelte(), tailwindcss(), hotReloadPlugin],
     resolve: {
       alias: {
         '@src': path.resolve(__dirname, './src'),
       }
     },
     build: {
-      watch: {
+      watch: inProd ? undefined : {
         exclude: ["**.md"]
       },
       // Build as lib. W/o this, vite will try to build as an app
