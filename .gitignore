@@ -26,4 +26,3 @@ dist-ssr
 # Obsidian config files
 test-vault/.obsidian/*.json
 test-vault/.obsidian/plugins/*
-!test-vault/.obsidian/plugins/hot-reload/

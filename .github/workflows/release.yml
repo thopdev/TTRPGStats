@@ -2,6 +2,8 @@ name: Release Obsidian plugin
 
 on:
   push:
+    branches:
+      - main
     tags:
       - "*"
 
@@ -21,15 +23,31 @@ jobs:
       - name: Build plugin
         run: |
           npm install
+          npm run update
           npm run build
 
-      - name: Create release
+      - name: Commit updated files
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -m "chore: update and build for release" || echo "No changes to commit"
+          git push
+
+      - name: Tag commit with manifest version
+        id: tag
+        run: |
+          VERSION=$(jq -r .version public/manifest.json)
+          git tag "v$VERSION"
+          git push origin "v$VERSION"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ steps.tag.outputs.VERSION }}
+          files: |
+            public/main.js
+            public/manifest.json
+            public/styles.css
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          tag="${GITHUB_REF#refs/tags/}"
-
-          gh release create "$tag" \
-            --title="$tag" \
-            --draft \
-            main.js manifest.json
