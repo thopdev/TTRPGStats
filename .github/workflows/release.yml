@@ -40,6 +40,7 @@ jobs:
         id: tag
         run: |
           VERSION=$(jq -r .version public/manifest.json)
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
           git tag "$VERSION"
           git push origin "$VERSION"
 
@@ -53,4 +54,3 @@ jobs:
             public/styles.css
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          
