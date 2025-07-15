@@ -15,7 +15,7 @@
     "build": "node verifySetup.mjs && vite build --mode production",
     "preview": "vite preview",
     "check": "svelte-check --tsconfig ./tsconfig.json && tsc -p tsconfig.node.json",
-    "version": "npm version minor && node version-bump.mjs && git add manifest.json versions.json"
+    "version": "npm version patch && node version-bump.mjs"
   },
   "devDependencies": {
     "@clack/prompts": "^0.9.0",
