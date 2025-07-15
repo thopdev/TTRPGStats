@@ -40,7 +40,8 @@ jobs:
         id: tag
         run: |
           VERSION=$(jq -r .version public/manifest.json)
-
+          git tag "$VERSION"
+          git push origin "$VERSION"
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
