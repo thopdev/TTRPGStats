@@ -1,13 +1,11 @@
 {
   "name": "ttrpg-stats",
-  "private": true,
-  "version": "0.0.1",
-  "description": "A template for building Obsidian plugins with Svelte 5",
-  "author": "Steven Stavrakis",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/StevenStavrakis/obsidian-plugin-svelte-template"
-  },
+  "version": "1.1.1",
+  "description": "TTRPG Stats allows you create your character sheet in obsidian with dynamic components that allow you to track your hp, spellslots, gold and way more.",
+  "main": "main.js",
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
   "type": "module",
   "scripts": {
     "setup": "node setupScript.mjs",
