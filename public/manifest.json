@@ -1,10 +1,10 @@
 {
-  "id": "ttrpg-stats",
-  "name": "ttrpg-stats",
-  "description": "TTRPG Stats allows you create your character sheet in obsidian with dynamic components that allow you to track your hp, spellslots, gold and way more.",
-  "author": "ThopDev",
-  "authorUrl": "https://github.com/thopdev",
-  "minAppVersion": "1.0.0",
-  "isDesktopOnly": true,
-  "version": "1.1.3"
+	"id": "ttrpg-stats",
+	"name": "ttrpg-stats",
+	"description": "TTRPG Stats allows you create your character sheet in obsidian with dynamic components that allow you to track your hp, spellslots, gold and way more.",
+	"author": "ThopDev",
+	"authorUrl": "https://github.com/thopdev",
+	"minAppVersion": "1.0.0",
+	"isDesktopOnly": true,
+	"version": "1.1.4"
 }
