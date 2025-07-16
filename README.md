@@ -159,3 +159,32 @@ Examples:
 | name | string | Yes      |         | Name inside the button                          |
 | id   | number | Yes      |         | Id of event that is trigged, as used in tracker |
 | color | string | No       | White   | Color of the button                   
+
+
+# Valuta (Currency Tracker)
+Component use:
+`ttrpgstats-valuta`
+```yaml
+id: convertnegative
+allowNegative: true
+convert: true
+valutas:
+  - platium: 1000
+  - gold: 100
+  - electrum: 50
+  - silver: 10
+  - copper: 1
+```
+
+### ValutaConfig
+| Name          | Type    | Required | Default | Comment                                              |
+|---------------|---------|----------|---------|------------------------------------------------------|
+| id            | string  | Yes      |         | Unique identifier for this valuta block              |
+| allowNegative | boolean | No       | false   | Allow negative values for currencies                 |
+| convert       | boolean | No       | false   | Automatically convert between currencies if possible |
+| valutas       | array   | Yes      |         | List of currency types and multipliers               |
+
+**Example:**
+This will create a currency tracker that allows negative values and will automatically convert between currencies (e.g., 10 silver → 1 gold) as needed.
+
+![alt text](image.png)
