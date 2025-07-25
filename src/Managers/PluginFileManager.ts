@@ -1,4 +1,4 @@
-import { stringifyYaml, type App, type FrontMatterCache, type TFile } from "obsidian";
+import { getFrontMatterInfo, stringifyYaml, type App, type FrontMatterCache, type TFile } from "obsidian";
 import { PluginEvent } from "@src/Events/PluginEvent";
 import { TrackerEventModel } from "@src/Events/TrackerEventModel";
 import { EmptyPluginEvent } from "@src/Events/EmptyPluginEvent";
@@ -51,17 +51,15 @@ export class PluginFileManager {
         this.fileLocks.set(filePath, prev.then(() => lock));
         await prev;
         try {
+
             this.propertyUpdatedBy = sender;
-
-            const content = await this.app.vault.read(this.file);
-            const match = content.match(/^---\n([\s\S]*?)\n---/);
-            let body = content;
-            if (match) {
-                body = content.slice(match[0].length);
-            }
-
-            const newContent = `---\n${stringifyYaml(this.properties)}---\n${body.replace(/^\n+/, '')}`;
-            await this.app.vault.modify(this.file, newContent);
+            this.app.fileManager.processFrontMatter(this.file, (fontmatter) => {
+                for (const key in this.properties) {
+                    if (Object.prototype.hasOwnProperty.call(this.properties, key)) {
+                        fontmatter[key] = this.properties[key];
+                    }
+                }
+            });
         } finally {
             release();
             // Clean up lock if this is the last queued update
