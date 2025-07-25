@@ -17,6 +17,9 @@ export class PluginEvent<T> {
 
     public emit(arg: T): void {
         if (!this.listeners) return;
-        this.listeners.forEach(listener => listener(arg));
+        console.log(`Emitting event with arg: ${JSON.stringify(arg)}`);
+        this.listeners.forEach(listener => {
+            listener(arg)
+        });
     }
 }

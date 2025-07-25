@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { TrackerEventModel } from "@src/Events/TrackerEventModel";
+	import { TrackerEventModel } from "@src/Events/TrackerEventModel";
 	import type { DefaultComponentProperties } from "@src/General/Models/DefaultComponentProperties";
 
 	let { settings, content, pluginFileManager }: DefaultComponentProperties =
