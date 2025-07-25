@@ -1,4 +1,4 @@
-import { getFrontMatterInfo, stringifyYaml, type App, type FrontMatterCache, type TFile } from "obsidian";
+import { type App, type FrontMatterCache, type TFile } from "obsidian";
 import { PluginEvent } from "@src/Events/PluginEvent";
 import { TrackerEventModel } from "@src/Events/TrackerEventModel";
 import { EmptyPluginEvent } from "@src/Events/EmptyPluginEvent";
@@ -44,27 +44,17 @@ export class PluginFileManager {
     }
 
     async saveProperties(sender: string) {
-        const filePath = this.file.path;
-        let release: () => void = () => { };
-        const prev = this.fileLocks.get(filePath) || Promise.resolve();
-        const lock = new Promise<void>(resolve => (release = resolve));
-        this.fileLocks.set(filePath, prev.then(() => lock));
-        await prev;
-        try {
 
-            this.propertyUpdatedBy = sender;
-            this.app.fileManager.processFrontMatter(this.file, (fontmatter) => {
-                for (const key in this.properties) {
-                    if (Object.prototype.hasOwnProperty.call(this.properties, key)) {
-                        fontmatter[key] = this.properties[key];
-                    }
+
+        this.propertyUpdatedBy = sender;
+        this.app.fileManager.processFrontMatter(this.file, (fontmatter) => {
+            for (const key in this.properties) {
+                if (Object.prototype.hasOwnProperty.call(this.properties, key)) {
+                    fontmatter[key] = this.properties[key];
                 }
-            });
-        } finally {
-            release();
-            // Clean up lock if this is the last queued update
-            if (this.fileLocks.get(filePath) === lock) this.fileLocks.delete(filePath);
-        }
+            }
+        });
+
     }
 }
 
