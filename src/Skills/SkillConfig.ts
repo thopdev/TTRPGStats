@@ -22,6 +22,7 @@ export class SkillConfig {
     };
     skills: SkillItemConfig[] = [];
     sort: "ability" | "name" | undefined = undefined;
+    modifiers: boolean = false;
 
     constructor(init?: Partial<SkillConfig>) {
         Object.assign(this, init);
@@ -80,6 +81,7 @@ export function ToSkillConfig(obj: Record<string, any> | undefined): ConfigResul
             proficiencyId: obj.proficiency ?? "proficiency_bonus",
             abilities,
             sort: obj.sort,
+            modifiers: obj.modifiers ?? false,
             skills: ToArray(obj.skills).map(s => new SkillItemConfig({
                 name: s.name,
                 ability: s.ability ?? "str",

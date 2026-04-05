@@ -54,8 +54,8 @@
 	}
 
 	function getAbilityMod(ability: string): number {
-		const score = abilityScores[ability] ?? 10;
-		return Math.floor((score - 10) / 2);
+		const value = abilityScores[ability] ?? 0;
+		return config?.modifiers ? value : Math.floor((value - 10) / 2);
 	}
 
 	function getProfBonus(skill: SkillItemConfig): number {
@@ -220,7 +220,7 @@
 
 	.title {
 		font-size: 1.05em;
-		text-transform: uppercase;
+		font-weight: bold;
 	}
 
 	.bold {
@@ -238,6 +238,7 @@
 		padding: 0.1em 0.5em;
 		min-height: 24px;
 		touch-action: manipulation;
+		cursor: pointer;
 	}
 
 	.prof-badge {
@@ -257,10 +258,10 @@
 	/* icon | name+ability | mod | prof | total */
 	.skill-row {
 		display: grid;
-		grid-template-columns: 1.2em 1fr 3em 3em 3em;
+		grid-template-columns: 1.4em 1fr 3em 3em 3.5em;
 		align-items: center;
-		gap: 0.4em;
-		padding: 0.15em 0.2em;
+		gap: 0.3em;
+		padding: 0.2em 0.3em;
 		border-radius: 4px;
 	}
 
@@ -269,8 +270,8 @@
 	}
 
 	.header-row {
-		padding-bottom: 0.2em;
 		border-bottom: 1px solid var(--background-modifier-border);
+		padding-bottom: 0.25em;
 	}
 
 	.col-label {
@@ -283,17 +284,17 @@
 
 	.prof-icon {
 		text-align: center;
-		font-size: 0.75em;
-		color: var(--text-muted);
+		font-size: 0.8em;
+		color: var(--text-faint);
 		cursor: default;
 	}
 
 	.prof-icon--proficient {
-		color: var(--color-blue, #4a90d9);
+		color: var(--interactive-accent) !important;
 	}
 
 	.prof-icon--expertise {
-		color: var(--color-yellow, #d4a017);
+		color: var(--color-yellow, #d4a017) !important;
 	}
 
 	.skill-name {
@@ -317,7 +318,7 @@
 	}
 
 	.skill-comment {
-		font-size: 0.75em;
+		font-size: 0.72em;
 		color: var(--text-muted);
 		font-style: italic;
 		white-space: nowrap;
@@ -336,12 +337,12 @@
 	}
 
 	.group-header {
-		font-size: 0.75em;
+		font-size: 0.72em;
 		font-weight: bold;
 		text-transform: uppercase;
-		letter-spacing: 0.05em;
+		letter-spacing: 0.06em;
 		color: var(--text-muted);
-		padding: 0.4em 0.2em 0.1em;
+		padding: 0.4em 0.3em 0.1em;
 		border-bottom: 1px solid var(--background-modifier-border);
 		margin-top: 0.2em;
 	}
