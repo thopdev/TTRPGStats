@@ -182,6 +182,15 @@
 		cursor: pointer;
 	}
 
+	button {
+		min-height: 44px;
+		touch-action: manipulation;
+	}
+
+	input {
+		min-height: 44px;
+	}
+
 	.form-error {
 		border-color: var(--color-red);
 		border-width: 2px;

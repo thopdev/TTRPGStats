@@ -161,6 +161,7 @@
 		>
 		<input
 			type="number"
+			inputmode="numeric"
 			class="min-width-250 text-center font-bigger"
 			bind:value={healAmount}
 		/>
@@ -210,7 +211,7 @@
 	}
 
 	.min-width-250 {
-		width: 250px;
+		width: min(100%, 250px);
 		text-align: center;
 	}
 
@@ -219,12 +220,15 @@
 	}
 
 	.big-checkbox {
-		width: 25px;
-		height: 25px;
+		width: 32px;
+		height: 32px;
+		min-width: 32px;
+		min-height: 32px;
 		background: transparent;
 		border-radius: 5px;
 		border: 2px solid #555;
 		color: transparent;
+		touch-action: manipulation;
 	}
 
 	.big-checkbox:checked:after {
@@ -232,8 +236,10 @@
 	}
 
 	.big-checkbox:hover,
+	.big-checkbox:active,
 	.big-checkbox:checked,
 	.big-checkbox:hover:checked,
+	.big-checkbox:active:checked,
 	.big-checkbox:after {
 		border-radius: 5px;
 		border: 2px solid #555;
@@ -241,16 +247,25 @@
 	}
 
 	.red-checkbox:hover,
+	.red-checkbox:active,
 	.red-checkbox:checked,
 	.red-checkbox:hover:checked,
+	.red-checkbox:active:checked,
 	.red-checkbox:after {
 		background-color: red;
 	}
 	.green-checkbox:hover,
+	.green-checkbox:active,
 	.green-checkbox:checked,
 	.green-checkbox:hover:checked,
+	.green-checkbox:active:checked,
 	.green-checkbox:after {
 		background-color: green;
+	}
+
+	button {
+		min-height: 44px;
+		touch-action: manipulation;
 	}
 
 	.pointer {

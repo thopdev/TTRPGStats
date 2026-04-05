@@ -46,6 +46,12 @@
 		background-color: var(--color-button) !important;
 	}
 
+	button {
+		min-height: 44px;
+		padding: 0.5em 1em;
+		touch-action: manipulation;
+	}
+
 	.pointer {
 		cursor: pointer;
 	}

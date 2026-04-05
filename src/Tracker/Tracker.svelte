@@ -117,6 +117,7 @@
 
 	.row {
 		flex-direction: row;
+		flex-wrap: wrap;
 	}
 	.bold {
 		font-weight: bold;
@@ -127,12 +128,15 @@
 	}
 
 	.big-checkbox {
-		width: 25px;
-		height: 25px;
+		width: 32px;
+		height: 32px;
+		min-width: 32px;
+		min-height: 32px;
 		background: transparent;
 		border-radius: 5px;
-		border: 2px sol #555;
+		border: 2px solid #555;
 		color: transparent;
+		touch-action: manipulation;
 	}
 
 	.big-checkbox:checked:after {
@@ -140,17 +144,21 @@
 	}
 
 	.big-checkbox:hover,
+	.big-checkbox:active,
 	.big-checkbox:checked,
 	.big-checkbox:hover:checked,
+	.big-checkbox:active:checked,
 	.big-checkbox:after {
 		border-radius: 5px;
-		border: 2px sol #555;
+		border: 2px solid #555;
 		animation: none;
 	}
 
 	.checkbox:hover,
+	.checkbox:active,
 	.checkbox:checked,
 	.checkbox:hover:checked,
+	.checkbox:active:checked,
 	.checkbox:after {
 		background-color: var(--color-checkbox);
 	}
