@@ -27,7 +27,6 @@
 	}
 
 	function click(event: any) {
-		event.preventDefault();
 		const checked = event?.target?.checked;
 
 		currentValue += checked ? 1 : -1;
@@ -99,7 +98,7 @@
 						style="--color-checkbox: {config.color};"
 						class="big-checkbox checkbox pointer"
 						checked={currentValue > i}
-						onclick={click}
+						onchange={click}
 					/>
 				{/each}
 			{/key}

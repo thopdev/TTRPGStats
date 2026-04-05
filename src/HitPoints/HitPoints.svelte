@@ -73,7 +73,6 @@
 	}
 
 	function handleDeathSaveFailClick(event: any) {
-		event.preventDefault();
 		const checked = event?.target?.checked;
 
 		deathsavefail += checked ? 1 : -1;
@@ -144,7 +143,7 @@
 								type="checkbox"
 								class="big-checkbox red-checkbox pointer"
 								checked={deathsavefail > i}
-								onclick={handleDeathSaveFailClick}
+								onchange={handleDeathSaveFailClick}
 							/>
 						{/each}
 					{/key}
