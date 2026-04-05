@@ -1,6 +1,6 @@
 ## No id or name
 ```ttrpgstats-tracker
-id: ''
+id: 'f'
 max: 5
 color: blue
 reset: 

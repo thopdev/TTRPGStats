@@ -7,6 +7,7 @@ import TrackerButtons from '@src/TrackerButtons/TrackerButtons.svelte';
 import Tracker from '@src/Tracker/Tracker.svelte';
 import HitPoint from '@src/HitPoints/HitPoints.svelte';
 import Money from '@src/Money/Money.svelte';
+import Skills from '@src/Skills/Skills.svelte';
 
 import { TtrpgStatsSettingTab } from './Settings/SettingTab';
 import type { TtrpgStatsPluginSettings } from './Settings/TtrpgStatsPluginSettings';
@@ -26,6 +27,7 @@ export default class TtrpgStatsPlugin extends Plugin {
 		this.registerComponent('ttrpgstats-tracker', Tracker);
 		this.registerComponent('ttrpgstats-button', TrackerButtons);
 		this.registerComponent('ttrpgstats-valuta', Money);
+		this.registerComponent('ttrpgstats-skills', Skills);
 
 		this.app.metadataCache.on('changed', this.onMetadataCacheChange.bind(this));
 
