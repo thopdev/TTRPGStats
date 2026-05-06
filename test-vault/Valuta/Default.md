@@ -25,12 +25,15 @@ simplify_silver: 22
 id: test
 convert: true
 valutas:
-- platium: 1000 
-- gold: 100
-- electrum: 50
-- silver: 10
-- copper: 1
+  - platium: 1001
+  - gold: 100
+  - electrum: 50
+  - silver: 10
+  - copper: 1
+  - d: 1
 ```
+
+
 
 ****
 ## Allow negative

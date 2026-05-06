@@ -1,6 +1,6 @@
 import './styles.css'
 
-import { Plugin, parseYaml, TFile } from 'obsidian';
+import { Plugin, parseYaml, TFile, Editor } from 'obsidian';
 import { mount, unmount } from 'svelte';
 import { PluginFileManager } from '@src/Managers/PluginFileManager';
 import TrackerButtons from '@src/TrackerButtons/TrackerButtons.svelte';
@@ -8,6 +8,7 @@ import Tracker from '@src/Tracker/Tracker.svelte';
 import HitPoint from '@src/HitPoints/HitPoints.svelte';
 import Money from '@src/Money/Money.svelte';
 import Skills from '@src/Skills/Skills.svelte';
+import { ConfiguratorModal } from '@src/Configurator/ConfiguratorModal';
 
 import { TtrpgStatsSettingTab } from './Settings/SettingTab';
 import type { TtrpgStatsPluginSettings } from './Settings/TtrpgStatsPluginSettings';
@@ -23,6 +24,22 @@ export default class TtrpgStatsPlugin extends Plugin {
 
 		await this.loadSettings();
 		this.addSettingTab(new TtrpgStatsSettingTab(this.app, this));
+
+		this.addCommand({
+			id: 'open-configurator',
+			name: 'Insert component',
+			editorCallback: (editor: Editor) => {
+				new ConfiguratorModal(this.app, editor).open();
+			}
+		});
+
+		this.addRibbonIcon('plus-circle', 'Insert TTRPG component', () => {
+			const editor = this.app.workspace.activeEditor?.editor;
+			if (editor) {
+				new ConfiguratorModal(this.app, editor).open();
+			}
+		});
+
 		this.registerComponent('ttrpgstats-hp', HitPoint);
 		this.registerComponent('ttrpgstats-tracker', Tracker);
 		this.registerComponent('ttrpgstats-button', TrackerButtons);

@@ -19,6 +19,13 @@ Create a component by adding a code block with the component name:
 
 The plugin saves all data to your note's frontmatter properties, so you can read and edit them without the plugin as well.
 
+## Component Configurator
+You can also insert and edit components using the built-in configurator instead of writing YAML by hand.
+
+**To insert a new component:** Click the `+` circle icon in the ribbon, or run the command **TTRPG Stats: Insert component** from the command palette. Pick a component, fill in the form, and click Insert — the code block is added at your cursor.
+
+**To edit an existing component:** Place your cursor inside an existing `ttrpgstats-*` code block and open the configurator. It will detect the block, pre-fill all fields with the current values, and replace the block when you click Insert.
+
 ---
 
 # Components
