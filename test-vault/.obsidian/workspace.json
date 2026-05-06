@@ -39,7 +39,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Skill/Default.md",
+                "file": "Valuta/Default.md",
                 "mode": "source",
                 "source": false
               },
@@ -195,15 +195,15 @@
   },
   "active": "653ef4ba2f7ae8d4",
   "lastOpenFiles": [
+    "Tracker/Error.md",
+    "Tracker/Default.md",
+    "Skill/Default.md",
     "Valuta/Default.md",
     "HP/Death.md",
     "HP/Default.md",
-    "Skill/Default.md",
     "Skill",
     "Naamloos.md",
     "Readme.md",
-    "Tracker/Default.md",
-    "Tracker/Error.md",
     "Valuta",
     "Tracker",
     "HP"

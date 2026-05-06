@@ -71,21 +71,69 @@
 			convertValutas();
 			return;
 		} else {
-			if (config?.allowNegative != true) {
-				paymentErrors = values.filter(
-					(data) => data.inputValue > data.value,
+			const simpleResult = values.map((v) => v.value - v.inputValue);
+			const needsBorrowing = simpleResult.some((val) => val < 0);
+
+			if (needsBorrowing && config?.allowNegative != true) {
+				const currentTotal = values.reduce(
+					(sum, v) => sum + v.value * v.config.multiplier,
+					0,
 				);
-				if (paymentErrors.length > 0) {
+				const removeTotal = values.reduce(
+					(sum, v) => sum + v.inputValue * v.config.multiplier,
+					0,
+				);
+				const newTotal = currentTotal - removeTotal;
+
+				if (newTotal < 0) {
+					paymentErrors = values.filter((x) => x.inputValue != 0);
 					return;
 				}
+
+				let moneyLeft = newTotal;
+				values
+					.toSorted((a, b) => a.config.multiplier - b.config.multiplier)
+					.toReversed()
+					.forEach((v) => {
+						const amount = Math.trunc(moneyLeft / v.config.multiplier);
+						v.value = amount;
+						moneyLeft -= amount * v.config.multiplier;
+					});
+			} else {
+				if (config?.allowNegative != true) {
+					paymentErrors = values.filter(
+						(data) => data.inputValue > data.value,
+					);
+					if (paymentErrors.length > 0) {
+						return;
+					}
+				}
+				values.forEach((data) => {
+					data.value -= data.inputValue;
+				});
 			}
-			values.forEach((data) => {
-				data.value -= data.inputValue;
-			});
+
 			saveValutas();
 		}
 		clear();
 		return;
+	}
+
+	function simplify() {
+		const total = values.reduce(
+			(sum, v) => sum + v.value * v.config.multiplier,
+			0,
+		);
+		let moneyLeft = total;
+		values
+			.toSorted((a, b) => a.config.multiplier - b.config.multiplier)
+			.toReversed()
+			.forEach((v) => {
+				const amount = Math.trunc(moneyLeft / v.config.multiplier);
+				v.value = amount;
+				moneyLeft -= amount * v.config.multiplier;
+			});
+		saveValutas();
 	}
 
 	function convertValutas() {
@@ -170,6 +218,11 @@
 		<button class="grow text-lg cursor-pointer" onclick={clear}>
 			Clear
 		</button>
+		{#if !config?.convert}
+			<button class="grow text-lg cursor-pointer" onclick={simplify}>
+				Simplify
+			</button>
+		{/if}
 	</div>
 </div>
 
