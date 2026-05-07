@@ -22,7 +22,7 @@
 		if (isNaN(maxHealth)) {
 			maxHealth = 1;
 			pluginFileManager.properties[settings.maxHealthPropertyName] = 1;
-			pluginFileManager.saveProperties(id);
+			void pluginFileManager.saveProperties(id);
 		}
 	}
 
@@ -37,7 +37,7 @@
 		pluginFileManager.properties[settings.deathSaveFailurePropertyName] =
 			null;
 
-		pluginFileManager.saveProperties(id);
+		void pluginFileManager.saveProperties(id);
 
 		healAmount = 1;
 	}
@@ -61,22 +61,22 @@
 				settings.deathSaveFailurePropertyName
 			] = 0;
 		}
-		pluginFileManager.saveProperties(id);
+		void pluginFileManager.saveProperties(id);
 	}
 
-	function handleDeathSaveSuccessClick(event: any) {
-		const checked = event?.target?.checked;
+	function handleDeathSaveSuccessClick(event: Event) {
+		const checked = (event?.target as HTMLInputElement)?.checked;
 
 		deathsaveSuccess += checked ? 1 : -1;
 
-		pluginFileManager.saveProperties(id);
+		void pluginFileManager.saveProperties(id);
 	}
 
-	function handleDeathSaveFailClick(event: any) {
-		const checked = event?.target?.checked;
+	function handleDeathSaveFailClick(event: Event) {
+		const checked = (event?.target as HTMLInputElement)?.checked;
 
 		deathsavefail += checked ? 1 : -1;
-		pluginFileManager.saveProperties(id);
+		void pluginFileManager.saveProperties(id);
 	}
 
 	function loadProperties() {

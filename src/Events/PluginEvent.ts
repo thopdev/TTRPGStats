@@ -1,7 +1,7 @@
 
 export class PluginEvent<T> {
 
-    private listeners: Function[] = [];
+    private listeners: ((event: T) => void)[] = [];
 
     public on(listener: (event: T) => void): void {
         if (!this.listeners) {
@@ -18,7 +18,7 @@ export class PluginEvent<T> {
     public emit(arg: T): void {
         if (!this.listeners) return;
         this.listeners.forEach(listener => {
-            listener(arg)
+            listener(arg);
         });
     }
 }

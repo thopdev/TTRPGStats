@@ -1,12 +1,12 @@
 export class EmptyPluginEvent {
 
-    private listeners = new Map<string, Function>();
+    private listeners = new Map<string, () => void>();
 
-    public on(object: string, listener: Function): void {
+    public on(object: string, listener: () => void): void {
         this.listeners.set(object, listener);
     }
 
-    public off(object: any): void {
+    public off(object: string): void {
         this.listeners.delete(object);
     }
 

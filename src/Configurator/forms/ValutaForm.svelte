@@ -1,14 +1,14 @@
 <script lang="ts">
-	let { onYaml, config = null }: { onYaml: (yaml: string) => void; config?: Record<string, any> | null } = $props();
+	let { onYaml, config = null }: { onYaml: (yaml: string) => void; config?: Record<string, unknown> | null } = $props();
 
 	let id = $state(config?.id ?? 'coins');
 	let convert = $state(config?.convert ?? false);
 	let allowNegative = $state(config?.allowNegative ?? false);
 	let displayNull = $state(config?.displayNull ?? true);
 	let valutas = $state<{ name: string; multiplier: number }[]>(
-		config?.valutas?.map((v: any) => {
+		(config?.valutas as Record<string, unknown>[] | undefined)?.map((v) => {
 			const key = Object.keys(v).find(k => k !== 'default');
-			return { name: key ?? '', multiplier: v[key!] ?? 1 };
+			return { name: key ?? '', multiplier: typeof v[key!] === 'number' ? v[key!] as number : 1 };
 		}) ?? [
 			{ name: 'gold', multiplier: 100 },
 			{ name: 'silver', multiplier: 10 },

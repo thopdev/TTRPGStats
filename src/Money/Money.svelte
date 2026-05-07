@@ -160,14 +160,14 @@
 
 	function saveTotalMoney() {
 		pluginFileManager.properties[config?.id ?? ""] = totalMoney;
-		pluginFileManager.saveProperties(id);
+		void pluginFileManager.saveProperties(id);
 	}
 
 	function saveValutas() {
 		values.forEach(
 			(x) => (pluginFileManager.properties[x.config.name] = x.value),
 		);
-		pluginFileManager.saveProperties(id);
+		void pluginFileManager.saveProperties(id);
 	}
 </script>
 

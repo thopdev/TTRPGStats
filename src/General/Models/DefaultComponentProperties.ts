@@ -3,11 +3,11 @@ import type { TtrpgStatsPluginSettings } from "@src/Settings/TtrpgStatsPluginSet
 
 export interface DefaultComponentProperties {
     settings: TtrpgStatsPluginSettings | undefined,
-    content?: Record<string, any> | undefined;
+    content?: Record<string, unknown> | undefined;
     pluginFileManager: PluginFileManager
 }
 
 export interface KeyValue {
     key: string;
-    value: any;
+    value: unknown;
 }

@@ -5,7 +5,6 @@ import { EmptyPluginEvent } from "@src/Events/EmptyPluginEvent";
 
 export class PluginFileManager {
 
-
     private file: TFile;
     private app: App;
     private fileLocks = new Map<string, Promise<void>>();
@@ -23,38 +22,32 @@ export class PluginFileManager {
 
         const metadata = this.app.metadataCache.getFileCache(file);
         this.properties = metadata?.frontmatter ?? {} as FrontMatterCache;
-
     }
 
-    propertiesUpdated() {
+    propertiesUpdated(): void {
         const filePath = this.file.path;
         let release: () => void = () => { };
-        const prev = this.fileLocks.get(filePath) || Promise.resolve();
+        const prev = this.fileLocks.get(filePath) ?? Promise.resolve();
         const lock = new Promise<void>(resolve => (release = resolve));
         this.fileLocks.set(filePath, prev.then(() => lock));
-        prev.then(() => {
+        void prev.then(() => {
             const fileCache = this.app.metadataCache.getFileCache(this.file);
             this.properties = fileCache?.frontmatter ?? {} as FrontMatterCache;
             this.propertyChangedEvent.emit(this.propertyUpdatedBy);
             this.propertyUpdatedBy = undefined;
             release();
-            // Clean up lock if this is the last queued update
             if (this.fileLocks.get(filePath) === lock) this.fileLocks.delete(filePath);
         });
     }
 
-    async saveProperties(sender: string) {
-
-
+    async saveProperties(sender: string): Promise<void> {
         this.propertyUpdatedBy = sender;
-        this.app.fileManager.processFrontMatter(this.file, (fontmatter) => {
+        await this.app.fileManager.processFrontMatter(this.file, (frontmatter) => {
             for (const key in this.properties) {
                 if (Object.prototype.hasOwnProperty.call(this.properties, key)) {
-                    fontmatter[key] = this.properties[key];
+                    frontmatter[key] = this.properties[key];
                 }
             }
         });
-
     }
 }
-

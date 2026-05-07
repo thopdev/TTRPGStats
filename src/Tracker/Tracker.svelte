@@ -26,12 +26,12 @@
 		}
 	}
 
-	function click(event: any) {
-		const checked = event?.target?.checked;
+	function click(event: Event) {
+		const checked = (event?.target as HTMLInputElement)?.checked;
 
 		currentValue += checked ? 1 : -1;
 		pluginFileManager.properties[config.id] = currentValue;
-		pluginFileManager.saveProperties(id);
+		void pluginFileManager.saveProperties(id);
 	}
 
 	function trackerEvent(event: TrackerEventModel) {
@@ -73,7 +73,7 @@
 				break;
 		}
 		pluginFileManager.properties[config.id] = currentValue;
-		pluginFileManager.saveProperties(id);
+		void pluginFileManager.saveProperties(id);
 	}
 
 	onDestroy(() => {

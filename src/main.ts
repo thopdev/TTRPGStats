@@ -1,7 +1,7 @@
 import './styles.css'
 
-import { Plugin, parseYaml, TFile, Editor } from 'obsidian';
-import { mount, unmount } from 'svelte';
+import { Plugin, parseYaml, TFile, Editor, type MarkdownPostProcessorContext } from 'obsidian';
+import { mount, unmount, type Component } from 'svelte';
 import { PluginFileManager } from '@src/Managers/PluginFileManager';
 import TrackerButtons from '@src/TrackerButtons/TrackerButtons.svelte';
 import Tracker from '@src/Tracker/Tracker.svelte';
@@ -16,11 +16,10 @@ import type { TtrpgStatsPluginSettings } from './Settings/TtrpgStatsPluginSettin
 export default class TtrpgStatsPlugin extends Plugin {
 
 	settings: TtrpgStatsPluginSettings | undefined;
-	components: [] = [];
+	components: ReturnType<typeof mount>[] = [];
 	pluginFileManagers: Map<string, PluginFileManager> = new Map();
 
-
-	async onload() {
+	async onload(): Promise<void> {
 
 		await this.loadSettings();
 		this.addSettingTab(new TtrpgStatsSettingTab(this.app, this));
@@ -40,26 +39,24 @@ export default class TtrpgStatsPlugin extends Plugin {
 			}
 		});
 
-		this.registerComponent('ttrpgstats-hp', HitPoint);
-		this.registerComponent('ttrpgstats-tracker', Tracker);
-		this.registerComponent('ttrpgstats-button', TrackerButtons);
-		this.registerComponent('ttrpgstats-valuta', Money);
-		this.registerComponent('ttrpgstats-skills', Skills);
+		this.registerComponent('ttrpgstats-hp', HitPoint as unknown as Component);
+		this.registerComponent('ttrpgstats-tracker', Tracker as unknown as Component);
+		this.registerComponent('ttrpgstats-button', TrackerButtons as unknown as Component);
+		this.registerComponent('ttrpgstats-valuta', Money as unknown as Component);
+		this.registerComponent('ttrpgstats-skills', Skills as unknown as Component);
 
-		this.app.metadataCache.on('changed', this.onMetadataCacheChange.bind(this));
-
+		this.app.metadataCache.on('changed', (file: TFile) => this.onMetadataCacheChange(file));
 	}
 
-	onMetadataCacheChange(changedFile: TFile) {
+	onMetadataCacheChange(changedFile: TFile): void {
 		const pluginFileManager = this.pluginFileManagers.get(changedFile.path);
 		if (pluginFileManager) {
-			pluginFileManager.propertiesUpdated()
+			pluginFileManager.propertiesUpdated();
 		}
 	}
 
-	registerComponent(name: string, component: any) {
-
-		this.registerMarkdownCodeBlockProcessor(name, async (source, el, ctx) => {
+	registerComponent(name: string, component: Component): void {
+		this.registerMarkdownCodeBlockProcessor(name, (source: string, el: HTMLElement, ctx: MarkdownPostProcessorContext) => {
 			try {
 				const file = this.app.vault.getAbstractFileByPath(ctx.sourcePath);
 
@@ -69,7 +66,7 @@ export default class TtrpgStatsPlugin extends Plugin {
 						pluginFileManager = new PluginFileManager(this.app, file);
 						this.pluginFileManagers.set(file.path, pluginFileManager);
 					}
-					const content = parseYaml(source) as Record<string, any>;
+					const content = parseYaml(source) as Record<string, unknown>;
 
 					this.components.push(mount(component, {
 						target: el,
@@ -81,31 +78,28 @@ export default class TtrpgStatsPlugin extends Plugin {
 					}));
 				}
 			} catch (e) {
-				el.createEl('pre',
-					{ text: 'Error rendering HTML: ' + e });
+				el.createEl('pre', { text: 'Error rendering component: ' + String(e) });
 			}
-		})
+		});
 	}
 
-	onunload() {
+	onunload(): void {
 		for (const component of this.components) {
-
 			unmount(component);
 		}
 		this.components = [];
 		this.pluginFileManagers = new Map();
 
-		this.app.metadataCache.off('changed', this.onMetadataCacheChange);
+		this.app.metadataCache.off('changed', (file: TFile) => this.onMetadataCacheChange(file));
 	}
 
-	async loadSettings() {
-		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
+	async loadSettings(): Promise<void> {
+		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData() as Partial<TtrpgStatsPluginSettings>);
 	}
 
-	async saveSettings() {
+	async saveSettings(): Promise<void> {
 		await this.saveData(this.settings);
 	}
-
 }
 
 const DEFAULT_SETTINGS: TtrpgStatsPluginSettings = {

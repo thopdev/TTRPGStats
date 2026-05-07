@@ -13,9 +13,7 @@ export class MoneyConfig {
         this.convert = convert;
         this.id = id;
         this.allowNegative = allowNegative;
-
         this.displayNull = displayNull;
-
     }
 }
 
@@ -33,22 +31,28 @@ export class ValutaConfig {
 }
 
 
-export function ToMoneyConfig(obj: Record<string, any> | undefined): ConfigResult<MoneyConfig> {
+export function ToMoneyConfig(obj: Record<string, unknown> | undefined): ConfigResult<MoneyConfig> {
     if (!obj) {
         throw new Error("obj cannot be undefined");
     }
 
+    const valutas = Array.isArray(obj.valutas) ? obj.valutas : [];
 
     return new ConfigResult({
-        value: new MoneyConfig(obj.valutas.map((v: any) => {
-            let name = Object.keys(v).find((k) => k !== "value");
-            if (!name) {
-                throw new Error("ValutaConfig name is undefined");
-            }
-            const defaultValue = v.default ?? false;
-
-            return new ValutaConfig(name, v.value ?? v[name], defaultValue);
-        }), obj.convert ?? false, obj.id ?? 'coins', obj.allowNegative ?? false, obj.displayNull ?? true)
+        value: new MoneyConfig(
+            valutas.map((v: Record<string, unknown>) => {
+                const name = Object.keys(v).find((k) => k !== "value");
+                if (!name) {
+                    throw new Error("ValutaConfig name is undefined");
+                }
+                const defaultValue = v.default === true;
+                const multiplier = typeof v.value === "number" ? v.value : (typeof v[name] === "number" ? v[name] as number : 1);
+                return new ValutaConfig(name, multiplier, defaultValue);
+            }),
+            obj.convert === true,
+            typeof obj.id === "string" ? obj.id : "coins",
+            obj.allowNegative === true,
+            obj.displayNull !== false
+        )
     });
-
 }

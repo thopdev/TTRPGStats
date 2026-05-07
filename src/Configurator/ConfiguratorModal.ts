@@ -1,5 +1,6 @@
 import { App, Modal, Editor, parseYaml } from 'obsidian';
 import { mount, unmount } from 'svelte';
+import type { Component } from 'svelte';
 import Configurator from './Configurator.svelte';
 
 const COMPONENT_TYPES: Record<string, string> = {
@@ -12,7 +13,7 @@ const COMPONENT_TYPES: Record<string, string> = {
 
 interface DetectedBlock {
     type: string;
-    config: Record<string, any>;
+    config: Record<string, unknown>;
     startLine: number;
     endLine: number;
 }
@@ -29,7 +30,7 @@ function detectBlockAtCursor(editor: Editor): DetectedBlock | null {
         const match = line.match(/^```(ttrpgstats-[\w-]+)/);
         if (match) {
             startLine = i;
-            codeBlockName = match[1];
+            codeBlockName = match[1] ?? '';
             break;
         }
         if (i !== cursor.line && line.startsWith('```')) break;
@@ -47,38 +48,35 @@ function detectBlockAtCursor(editor: Editor): DetectedBlock | null {
 
     if (endLine === -1) return null;
 
-    const yamlLines = [];
+    const yamlLines: string[] = [];
     for (let i = startLine + 1; i < endLine; i++) {
         yamlLines.push(editor.getLine(i));
     }
     const yaml = yamlLines.join('\n').trim();
-    const config = yaml ? (parseYaml(yaml) as Record<string, any>) ?? {} : {};
+    const parsed = yaml ? parseYaml(yaml) : {};
+    const config: Record<string, unknown> = (parsed && typeof parsed === 'object') ? parsed as Record<string, unknown> : {};
 
-    return { type: COMPONENT_TYPES[codeBlockName], config, startLine, endLine };
+    return { type: COMPONENT_TYPES[codeBlockName] ?? '', config, startLine, endLine };
 }
 
 export class ConfiguratorModal extends Modal {
     private editor: Editor;
-    private svelteComponent: any;
+    private svelteComponent: ReturnType<typeof mount> | null = null;
 
     constructor(app: App, editor: Editor) {
         super(app);
         this.editor = editor;
     }
 
-    onOpen() {
-        this.modalEl.style.width = 'min(90vw, 680px)';
+    onOpen(): void {
+        this.modalEl.addClass('ttrpg-configurator-modal');
 
         const existing = detectBlockAtCursor(this.editor);
 
-        if (existing) {
-            this.titleEl.setText('Edit TTRPG Component');
-        } else {
-            this.titleEl.setText('Insert TTRPG Component');
-        }
+        this.titleEl.setText(existing ? 'Edit TTRPG component' : 'Insert TTRPG component');
 
         this.contentEl.empty();
-        this.svelteComponent = mount(Configurator, {
+        this.svelteComponent = mount(Configurator as unknown as Component, {
             target: this.contentEl,
             props: {
                 initialType: existing?.type ?? null,
@@ -99,7 +97,7 @@ export class ConfiguratorModal extends Modal {
         });
     }
 
-    onClose() {
+    onClose(): void {
         if (this.svelteComponent) {
             unmount(this.svelteComponent);
             this.svelteComponent = null;

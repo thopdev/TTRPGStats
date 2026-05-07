@@ -1,5 +1,5 @@
 <script lang="ts">
-	let { onYaml, config = null }: { onYaml: (yaml: string) => void; config?: Record<string, any> | null } = $props();
+	let { onYaml, config = null }: { onYaml: (yaml: string) => void; config?: Record<string, unknown> | null } = $props();
 
 	const CALC_OPTIONS = ['zero', 'max', 'decrease', 'increase', 'devideMaxUp', 'devideMaxDown', 'double'];
 
@@ -8,7 +8,7 @@
 	let max = $state(config?.max ?? 5);
 	let color = $state(config?.color ?? '');
 	let events = $state<{ name: string; calc: string }[]>(
-		config?.events?.map((e: any) => ({ name: e.name ?? '', calc: e.calc ?? 'max' })) ?? []
+		(config?.events as Record<string, unknown>[] | undefined)?.map((e) => ({ name: String(e.name ?? ''), calc: String(e.calc ?? 'max') })) ?? []
 	);
 
 	function addEvent() {

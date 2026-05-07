@@ -1,9 +1,9 @@
 <script lang="ts">
-	let { onYaml, config = null }: { onYaml: (yaml: string) => void; config?: Record<string, any> | null } = $props();
+	let { onYaml, config = null }: { onYaml: (yaml: string) => void; config?: Record<string, unknown> | null } = $props();
 
 	let name = $state(config?.name ?? '');
 	let buttons = $state<{ name: string; id: string; color: string }[]>(
-		config?.buttons?.map((b: any) => ({ name: b.name ?? '', id: b.id ?? '', color: b.color ?? '' }))
+		(config?.buttons as Record<string, unknown>[] | undefined)?.map((b) => ({ name: String(b.name ?? ''), id: String(b.id ?? ''), color: String(b.color ?? '') }))
 		?? [{ name: 'Short Rest', id: 'short', color: '' }, { name: 'Long Rest', id: 'long', color: '' }]
 	);
 

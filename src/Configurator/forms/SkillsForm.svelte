@@ -1,5 +1,5 @@
 <script lang="ts">
-	let { onYaml, config = null }: { onYaml: (yaml: string) => void; config?: Record<string, any> | null } = $props();
+	let { onYaml, config = null }: { onYaml: (yaml: string) => void; config?: Record<string, unknown> | null } = $props();
 
 	const ABILITIES = ['str', 'dex', 'con', 'int', 'wis', 'cha'];
 
@@ -7,11 +7,11 @@
 	let modifiers = $state(config?.modifiers ?? false);
 	let sort = $state<'' | 'name' | 'ability'>(config?.sort ?? '');
 	let skills = $state(
-		config?.skills?.map((s: any) => ({
-			name: s.name ?? '',
-			ability: s.ability ?? 'str',
-			proficient: s.proficient ?? false,
-			expertise: s.expertise ?? false,
+		(config?.skills as Record<string, unknown>[] | undefined)?.map((s) => ({
+			name: String(s.name ?? ''),
+			ability: String(s.ability ?? 'str'),
+			proficient: s.proficient === true,
+			expertise: s.expertise === true,
 		})) ?? [
 		{ name: 'Athletics', ability: 'str', proficient: false, expertise: false },
 		{ name: 'Acrobatics', ability: 'dex', proficient: false, expertise: false },

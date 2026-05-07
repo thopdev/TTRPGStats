@@ -8,7 +8,7 @@
 	let { onInsert, initialType = null, initialConfig = null }: {
 		onInsert: (codeBlock: string) => void;
 		initialType?: string | null;
-		initialConfig?: Record<string, any> | null;
+		initialConfig?: Record<string, unknown> | null;
 	} = $props();
 
 	const COMPONENTS = [

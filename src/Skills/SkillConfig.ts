@@ -61,7 +61,7 @@ export class SkillConfig {
     };
 }
 
-export function ToSkillConfig(obj: Record<string, any> | undefined): ConfigResult<SkillConfig> {
+export function ToSkillConfig(obj: Record<string, unknown> | undefined): ConfigResult<SkillConfig> {
     if (!obj?.skills) {
         return new ConfigResult<SkillConfig>({
             error: new ConfigError(
@@ -71,23 +71,29 @@ export function ToSkillConfig(obj: Record<string, any> | undefined): ConfigResul
         });
     }
 
-    const abilities = obj.abilities ?? {
-        str: "str", dex: "dex", con: "con",
-        int: "int", wis: "wis", cha: "cha"
-    };
+    const abilitiesRaw = obj.abilities;
+    const abilities: Record<string, string> = (abilitiesRaw && typeof abilitiesRaw === "object" && !Array.isArray(abilitiesRaw))
+        ? Object.fromEntries(
+            Object.entries(abilitiesRaw as Record<string, unknown>).map(([k, v]) => [k, String(v)])
+        )
+        : { str: "str", dex: "dex", con: "con", int: "int", wis: "wis", cha: "cha" };
+
+    const sortRaw = obj.sort;
+    const sort: "ability" | "name" | undefined =
+        sortRaw === "ability" || sortRaw === "name" ? sortRaw : undefined;
 
     return new ConfigResult<SkillConfig>({
         value: new SkillConfig({
-            proficiencyId: obj.proficiency ?? "proficiency_bonus",
+            proficiencyId: typeof obj.proficiency === "string" ? obj.proficiency : "proficiency_bonus",
             abilities,
-            sort: obj.sort,
-            modifiers: obj.modifiers ?? false,
-            skills: ToArray(obj.skills).map(s => new SkillItemConfig({
-                name: s.name,
-                ability: s.ability ?? "str",
-                proficient: s.proficient ?? false,
-                expertise: s.expertise ?? false,
-                comment: s.comment,
+            sort,
+            modifiers: obj.modifiers === true,
+            skills: ToArray(obj.skills as Record<string, unknown>[]).map(s => new SkillItemConfig({
+                name: typeof s.name === "string" ? s.name : "",
+                ability: typeof s.ability === "string" ? s.ability : "str",
+                proficient: s.proficient === true,
+                expertise: s.expertise === true,
+                comment: typeof s.comment === "string" ? s.comment : undefined,
             }))
         })
     });
