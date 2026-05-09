@@ -32,7 +32,7 @@ export default class TtrpgStatsPlugin extends Plugin {
 			}
 		});
 
-		this.addRibbonIcon('plus-circle', 'Insert TTRPG component', () => {
+		this.addRibbonIcon('plus-circle', 'Insert component', () => {
 			const editor = this.app.workspace.activeEditor?.editor;
 			if (editor) {
 				new ConfiguratorModal(this.app, editor).open();
@@ -85,7 +85,7 @@ export default class TtrpgStatsPlugin extends Plugin {
 
 	onunload(): void {
 		for (const component of this.components) {
-			unmount(component);
+			void unmount(component);
 		}
 		this.components = [];
 		this.pluginFileManagers = new Map();

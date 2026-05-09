@@ -44,8 +44,8 @@ export function ToTrackerConfig(obj: Record<string, unknown> | undefined): Confi
 
     return new ConfigResult<TrackerConfig>({
         value: new TrackerConfig({
-            id: String(obj.id ?? obj.name),
-            name: obj.name !== undefined ? String(obj.name) : undefined,
+            id: typeof obj.id === "string" ? obj.id : (typeof obj.name === "string" ? obj.name : ""),
+            name: typeof obj.name === "string" ? obj.name : undefined,
             max: typeof obj.max === "number" ? obj.max : 1,
             color: typeof obj.color === "string" ? obj.color : "blue",
             events: ToArray(obj.events).map(x => ToTrackerConfigEvent(x))

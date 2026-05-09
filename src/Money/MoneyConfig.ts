@@ -46,7 +46,8 @@ export function ToMoneyConfig(obj: Record<string, unknown> | undefined): ConfigR
                     throw new Error("ValutaConfig name is undefined");
                 }
                 const defaultValue = v.default === true;
-                const multiplier = typeof v.value === "number" ? v.value : (typeof v[name] === "number" ? v[name] as number : 1);
+                const namedVal = v[name];
+                const multiplier = typeof v.value === "number" ? v.value : (typeof namedVal === "number" ? namedVal : 1);
                 return new ValutaConfig(name, multiplier, defaultValue);
             }),
             obj.convert === true,
